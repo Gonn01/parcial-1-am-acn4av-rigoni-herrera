@@ -2,10 +2,11 @@ package com.example.proyectoappsmovilesdavinci.dtos;
 
 public class PurchaseHomeDto {
 
-                 private final int id;
-          private final double amount;
-                 private final String name;
- private final int financialEntityId;
+    private int id;
+    private double amount;
+    private String name;
+    private int financialEntityId;
+    private String imageUri; // Imagen de factura (opcional)
 
     public PurchaseHomeDto(
             int id,
@@ -19,9 +20,23 @@ public class PurchaseHomeDto {
         this.financialEntityId = financialEntityId;
     }
 
+    // ---- GETTERS ----
     public int getId() { return id; }
     public double getAmount() { return amount; }
     public String getName() { return name; }
     public int getFinancialEntityId() { return financialEntityId; }
+    public String getImageUri() { return imageUri; }
 
+    // ---- SETTERS (para editar) ----
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
+    }
 }

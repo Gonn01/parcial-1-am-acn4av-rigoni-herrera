@@ -16,6 +16,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
+
 
 public class DashboardActivity extends AppCompatActivity {
     private final List<FinancialEntityHomeDto> entidades = new ArrayList<>();
@@ -55,6 +57,17 @@ public class DashboardActivity extends AppCompatActivity {
                 .replace(R.id.fragment_container, fragment)
                 .commit();
     }
+
+    public void removeCompraById(int id) {
+        Iterator<PurchaseHomeDto> it = compras.iterator();
+        while (it.hasNext()) {
+            if (it.next().getId() == id) {
+                it.remove();
+                break;
+            }
+        }
+    }
+
     public List<FinancialEntityHomeDto> getEntidades() {
         return entidades;
     }
