@@ -15,7 +15,6 @@ import java.util.List;
 
 public final class HomeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    // ------------------ MODELOS ------------------
     public interface Row {}
 
     public static final class EntityHeader implements Row {
@@ -38,7 +37,6 @@ public final class HomeListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
-    // ------------------ CALLBACK ------------------
     public interface OnPurchaseClickListener {
         void onPurchaseClick(int purchaseId);
     }

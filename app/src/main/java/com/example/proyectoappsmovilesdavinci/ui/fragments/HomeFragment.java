@@ -61,7 +61,6 @@ public class HomeFragment extends Fragment {
         TextView welcomeTxt = view.findViewById(R.id.welcome);
         welcomeTxt.setText("Bienvenido, " + user.getName() + "!");
 
-        // --- para la imagen
         imagePickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.GetContent(),
                 uri -> {
@@ -92,7 +91,6 @@ public class HomeFragment extends Fragment {
         refreshList();
     }
 
-    // ========= Crear entidad =========
     private void dialogCrearEntidad() {
         final EditText input = new EditText(requireContext());
         input.setHint("Nombre de la entidad");
@@ -115,7 +113,6 @@ public class HomeFragment extends Fragment {
                 .show();
     }
 
-    // ========= CREAR compra =========
     private void dialogCrearCompra() {
         if (main.getEntidades().isEmpty()) {
             Toast.makeText(requireContext(),
@@ -161,7 +158,6 @@ public class HomeFragment extends Fragment {
                 .show();
     }
 
-    // ========= EDITAR / ELIMINAR / IMAGEN =========
     private void mostrarDialogoEditarCompra(int purchaseId) {
 
         PurchaseHomeDto compra = buscarCompraPorId(purchaseId);
@@ -206,8 +202,6 @@ public class HomeFragment extends Fragment {
                 .setNegativeButton("Cancelar", null)
                 .show();
     }
-
-    // ========= HELPERS =========
 
     private PurchaseHomeDto buscarCompraPorId(int id) {
         for (PurchaseHomeDto p : main.getCompras()) {
@@ -259,7 +253,6 @@ public class HomeFragment extends Fragment {
         return txt;
     }
 
-    // ========= LISTA =========
     private void refreshList() {
         Map<Integer, List<PurchaseHomeDto>> byEntity = new HashMap<>();
         for (PurchaseHomeDto p : main.getCompras()) {
