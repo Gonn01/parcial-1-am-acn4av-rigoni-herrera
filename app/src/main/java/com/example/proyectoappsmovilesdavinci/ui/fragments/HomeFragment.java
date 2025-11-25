@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ImageView;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,6 +34,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+
 
 public class HomeFragment extends Fragment {
 
@@ -156,6 +160,51 @@ public class HomeFragment extends Fragment {
     }
 
     // ========= EDITAR / ELIMINAR / IMAGEN =========
+//    private void mostrarDialogoEditarCompra(int purchaseId) {
+//
+//        PurchaseHomeDto compra = buscarCompraPorId(purchaseId);
+//        if (compra == null) return;
+//
+//        LinearLayout layout = crearLayoutDialogo();
+//
+//        EditText txtNombre = crearCampoTexto(layout, "Nombre", compra.getName());
+//        EditText txtMonto  = crearCampoNumero(layout, "Monto",
+//                String.valueOf(compra.getAmount()));
+//
+//        // Botón para imagen
+//        TextView lblImg = new TextView(requireContext());
+//        lblImg.setText("Imagen de factura");
+//        layout.addView(lblImg);
+//
+//        MaterialButton btnImg = new MaterialButton(requireContext());
+//        btnImg.setText(compra.getImageUri() == null ?
+//                "Agregar imagen" : "Cambiar imagen");
+//        layout.addView(btnImg);
+//
+//        btnImg.setOnClickListener(v -> {
+//            compraEnEdicionParaImagen = compra;
+//            imagePickerLauncher.launch("image/*");
+//        });
+//
+//        new MaterialAlertDialogBuilder(requireContext())
+//                .setTitle("Editar Compra")
+//                .setView(layout)
+//                .setPositiveButton("Guardar", (d, w) -> {
+//                    compra.setName(txtNombre.getText().toString());
+//                    compra.setAmount(Double.parseDouble(txtMonto.getText().toString()));
+//
+//                    refreshList();
+//                    Toast.makeText(requireContext(),
+//                            "Compra actualizada", Toast.LENGTH_SHORT).show();
+//                })
+//                .setNeutralButton("Eliminar", (d, w) -> {
+//                    main.removeCompraById(compra.getId());
+//                    refreshList();
+//                })
+//                .setNegativeButton("Cancelar", null)
+//                .show();
+//    }
+
     private void mostrarDialogoEditarCompra(int purchaseId) {
 
         PurchaseHomeDto compra = buscarCompraPorId(purchaseId);
@@ -163,18 +212,44 @@ public class HomeFragment extends Fragment {
 
         LinearLayout layout = crearLayoutDialogo();
 
-        EditText txtNombre = crearCampoTexto(layout, "Nombre", compra.getName());
-        EditText txtMonto  = crearCampoNumero(layout, "Monto",
-                String.valueOf(compra.getAmount()));
+        // === SPINNER DE ENTIDAD (PRE- SELECCIONADO) ===
+        TextView lblEntidad = new TextView(requireContext());
+        lblEntidad.setText("Entidad financiera");
+        layout.addView(lblEntidad);
 
-        // Botón para imagen
+        Spinner spEntidad = new Spinner(requireContext());
+        ArrayAdapter<FinancialEntityHomeDto> adpEntidad = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                main.getEntidades()
+        );
+        spEntidad.setAdapter(adpEntidad);
+        layout.addView(spEntidad);
+
+        // Preseleccionar la entidad actual
+        int index = 0;
+        for (int i = 0; i < main.getEntidades().size(); i++) {
+            if (main.getEntidades().get(i).getId() == compra.getFinancialEntityId()) {
+                index = i;
+                break;
+            }
+        }
+        spEntidad.setSelection(index);
+
+        // === CAMPOS PRE-LLENADOS ===
+        EditText txtNombre = crearCampoTexto(layout, "Nombre", "");
+        txtNombre.setText(compra.getName());
+
+        EditText txtMonto = crearCampoNumero(layout, "Monto", "");
+        txtMonto.setText(String.valueOf(compra.getAmount()));
+
+        // === Imagen ===
         TextView lblImg = new TextView(requireContext());
         lblImg.setText("Imagen de factura");
         layout.addView(lblImg);
 
         MaterialButton btnImg = new MaterialButton(requireContext());
-        btnImg.setText(compra.getImageUri() == null ?
-                "Agregar imagen" : "Cambiar imagen");
+        btnImg.setText(compra.getImageUri() == null ? "Agregar imagen" : "Cambiar imagen");
         layout.addView(btnImg);
 
         btnImg.setOnClickListener(v -> {
@@ -182,16 +257,51 @@ public class HomeFragment extends Fragment {
             imagePickerLauncher.launch("image/*");
         });
 
+        // === Botón Ver imagen ===
+        if (compra.getImageUri() != null) {
+            MaterialButton btnVerImg = new MaterialButton(requireContext());
+            btnVerImg.setText("Ver imagen");
+            layout.addView(btnVerImg);
+
+            btnVerImg.setOnClickListener(v -> mostrarDialogoVerImagen(compra.getImageUri()));
+        }
+
+        // === DIALOGO ===
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Editar Compra")
                 .setView(layout)
                 .setPositiveButton("Guardar", (d, w) -> {
-                    compra.setName(txtNombre.getText().toString());
-                    compra.setAmount(Double.parseDouble(txtMonto.getText().toString()));
+
+                    String nuevoNombre = txtNombre.getText().toString().trim();
+                    String nuevoMontoStr = txtMonto.getText().toString().trim();
+
+                    if (nuevoNombre.isEmpty()) {
+                        Toast.makeText(requireContext(), "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (nuevoMontoStr.isEmpty()) {
+                        Toast.makeText(requireContext(), "El monto no puede estar vacío", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    double nuevoMonto;
+                    try {
+                        nuevoMonto = Double.parseDouble(nuevoMontoStr);
+                    } catch (Exception e) {
+                        Toast.makeText(requireContext(), "Monto inválido", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    FinancialEntityHomeDto entidadSeleccionada =
+                            (FinancialEntityHomeDto) spEntidad.getSelectedItem();
+
+                    compra.setName(nuevoNombre);
+                    compra.setAmount(nuevoMonto);
+                    compra.setFinancialEntityId(entidadSeleccionada.getId());
 
                     refreshList();
-                    Toast.makeText(requireContext(),
-                            "Compra actualizada", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Compra actualizada", Toast.LENGTH_SHORT).show();
                 })
                 .setNeutralButton("Eliminar", (d, w) -> {
                     main.removeCompraById(compra.getId());
@@ -252,6 +362,21 @@ public class HomeFragment extends Fragment {
         txt.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         return txt;
     }
+    private void mostrarDialogoVerImagen(String uri) {
+        ImageView imageView = new ImageView(requireContext());
+        imageView.setAdjustViewBounds(true);
+        imageView.setPadding(16, 16, 16, 16);
+
+        // Carga la imagen desde la URI
+        imageView.setImageURI(android.net.Uri.parse(uri));
+
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Imagen adjunta")
+                .setView(imageView)
+                .setPositiveButton("Cerrar", null)
+                .show();
+    }
+
 
     // ========= LISTA =========
     private void refreshList() {
