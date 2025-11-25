@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "904950174900",
+    "project_id": "purchase-app-tp",
+    "storage_bucket": "purchase-app-tp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:904950174900:android:1010809a570c77956433e1",
+        "android_client_info": {
+          "package_name": "com.example.proyectoappsmovilesdavinci"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "904950174900-d24ipe2g8606fplqlmb2agu960710udv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.proyectoappsmovilesdavinci",
+            "certificate_hash": "dc25014ded3dda5174f6d9990653e93b04ea0bd1"
+          }
+        },
+        {
+          "client_id": "904950174900-0al1cb9rpt0i9gqpccuqj6vf6lun4k9t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdyjRTE9LSemkmd52a59fQTmGbzPrRiAc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "904950174900-0al1cb9rpt0i9gqpccuqj6vf6lun4k9t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
