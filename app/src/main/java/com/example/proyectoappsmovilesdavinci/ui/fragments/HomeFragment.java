@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.proyectoappsmovilesdavinci.R;
 import com.example.proyectoappsmovilesdavinci.dtos.FinancialEntityHomeDto;
 import com.example.proyectoappsmovilesdavinci.dtos.PurchaseHomeDto;
+import com.example.proyectoappsmovilesdavinci.dtos.User;
 import com.example.proyectoappsmovilesdavinci.ui.DashboardActivity;
 import com.example.proyectoappsmovilesdavinci.ui.adapters.dashboard.HomeListAdapter;
 import com.google.android.material.button.MaterialButton;
@@ -40,13 +41,16 @@ public class HomeFragment extends Fragment {
 
     private ActivityResultLauncher<String> imagePickerLauncher;
     private PurchaseHomeDto compraEnEdicionParaImagen;
-
+    private User user;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         main = (DashboardActivity) requireActivity();
+        if (getArguments() != null) {
+            user = (User) getArguments().getSerializable("user");
+        }
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -54,6 +58,8 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        TextView welcomeTxt = view.findViewById(R.id.welcome);
+        welcomeTxt.setText("Bienvenido, " + user.getName() + "!");
 
         // --- para la imagen
         imagePickerLauncher = registerForActivityResult(

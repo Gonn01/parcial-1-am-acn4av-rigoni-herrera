@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.proyectoappsmovilesdavinci.R;
+import com.example.proyectoappsmovilesdavinci.dtos.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -106,7 +107,13 @@ public class LoginActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 FirebaseUser user = mAuth.getCurrentUser();
 
+                User myUser = new User(
+                        user.getUid(),
+                        user.getDisplayName(),
+                        user.getEmail()
+                );
                 Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                intent.putExtra("user", myUser);
                 startActivity(intent);
                 finish();
 

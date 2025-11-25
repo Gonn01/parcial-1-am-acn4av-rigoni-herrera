@@ -1,6 +1,7 @@
 package com.example.proyectoappsmovilesdavinci.ui;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import com.example.proyectoappsmovilesdavinci.R;
 import com.example.proyectoappsmovilesdavinci.dtos.FinancialEntityHomeDto;
 import com.example.proyectoappsmovilesdavinci.dtos.PurchaseHomeDto;
+import com.example.proyectoappsmovilesdavinci.dtos.User;
 import com.example.proyectoappsmovilesdavinci.ui.fragments.FinancialEntitiesFragment;
 import com.example.proyectoappsmovilesdavinci.ui.fragments.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -24,14 +26,13 @@ public class DashboardActivity extends AppCompatActivity {
     private final List<PurchaseHomeDto> compras = new ArrayList<>();
     private int nextEntityId = 1;
     private int nextPurchaseId = 1;
-
     private BottomNavigationView bottomNav;
-
+    private User user;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        user = (User) getIntent().getSerializableExtra("user");
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_dashboard);
-
         bottomNav = findViewById(R.id.bottom_navigation);
 
         if (savedInstanceState == null) {
@@ -52,6 +53,10 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void swap(@NonNull Fragment fragment) {
+        Bundle args = new Bundle();
+        args.putSerializable("user", user);
+        fragment.setArguments(args);
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment)
@@ -67,7 +72,6 @@ public class DashboardActivity extends AppCompatActivity {
             }
         }
     }
-
     public List<FinancialEntityHomeDto> getEntidades() {
         return entidades;
     }
