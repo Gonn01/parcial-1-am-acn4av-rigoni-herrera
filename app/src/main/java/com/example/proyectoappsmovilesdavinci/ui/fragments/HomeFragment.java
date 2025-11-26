@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ImageView;
 
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.activity.result.ActivityResultLauncher;
@@ -36,8 +35,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-
 public class HomeFragment extends Fragment {
 
     private HomeListAdapter listAdapter;
@@ -46,11 +43,12 @@ public class HomeFragment extends Fragment {
     private ActivityResultLauncher<String> imagePickerLauncher;
     private PurchaseHomeDto compraEnEdicionParaImagen;
     private User user;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
         main = (DashboardActivity) requireActivity();
         if (getArguments() != null) {
             user = (User) getArguments().getSerializable("user");
@@ -60,12 +58,11 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view,
-                              @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         TextView welcomeTxt = view.findViewById(R.id.welcome);
         welcomeTxt.setText("Bienvenido, " + user.getName() + "!");
 
-        // --- para la imagen
         imagePickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.GetContent(),
                 uri -> {
@@ -76,8 +73,7 @@ public class HomeFragment extends Fragment {
                         refreshList();
                     }
                     compraEnEdicionParaImagen = null;
-                }
-        );
+                });
 
         RecyclerView recyclerView = view.findViewById(R.id.rvHome);
         MaterialButton botonCrearEntidad = view.findViewById(R.id.crear_entidad_financiera);
@@ -96,7 +92,6 @@ public class HomeFragment extends Fragment {
         refreshList();
     }
 
-    // ========= Crear entidad =========
     private void dialogCrearEntidad() {
         final EditText input = new EditText(requireContext());
         input.setHint("Nombre de la entidad");
@@ -111,15 +106,13 @@ public class HomeFragment extends Fragment {
                                 "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    FinancialEntityHomeDto fe =
-                            new FinancialEntityHomeDto(main.nextEntityId(), name);
+                    FinancialEntityHomeDto fe = new FinancialEntityHomeDto(main.nextEntityId(), name);
                     main.addEntidad(fe);
                 })
                 .setNegativeButton("Cancelar", null)
                 .show();
     }
 
-    // ========= CREAR compra =========
     private void dialogCrearCompra() {
         if (main.getEntidades().isEmpty()) {
             Toast.makeText(requireContext(),
@@ -131,14 +124,13 @@ public class HomeFragment extends Fragment {
 
         Spinner spEntidad = crearSpinnerEntidades(layout);
         EditText txtNombre = crearCampoTexto(layout, "Nombre de la compra", "Ej: Spotify");
-        EditText txtMonto  = crearCampoNumero(layout, "Monto", "1999.99");
+        EditText txtMonto = crearCampoNumero(layout, "Monto", "1999.99");
 
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Nueva Compra")
                 .setView(layout)
                 .setPositiveButton("Guardar", (d, w) -> {
-                    FinancialEntityHomeDto fe =
-                            (FinancialEntityHomeDto) spEntidad.getSelectedItem();
+                    FinancialEntityHomeDto fe = (FinancialEntityHomeDto) spEntidad.getSelectedItem();
 
                     String nombre = txtNombre.getText().toString().trim();
                     String montoStr = txtMonto.getText().toString().trim();
@@ -155,8 +147,7 @@ public class HomeFragment extends Fragment {
                             main.nextPurchaseId(),
                             monto,
                             nombre,
-                            fe.getId()
-                    );
+                            fe.getId());
 
                     main.addCompra(p);
                     refreshList();
@@ -165,56 +156,11 @@ public class HomeFragment extends Fragment {
                 .show();
     }
 
-    // ========= EDITAR / ELIMINAR / IMAGEN =========
-//    private void mostrarDialogoEditarCompra(int purchaseId) {
-//
-//        PurchaseHomeDto compra = buscarCompraPorId(purchaseId);
-//        if (compra == null) return;
-//
-//        LinearLayout layout = crearLayoutDialogo();
-//
-//        EditText txtNombre = crearCampoTexto(layout, "Nombre", compra.getName());
-//        EditText txtMonto  = crearCampoNumero(layout, "Monto",
-//                String.valueOf(compra.getAmount()));
-//
-//        // Botón para imagen
-//        TextView lblImg = new TextView(requireContext());
-//        lblImg.setText("Imagen de factura");
-//        layout.addView(lblImg);
-//
-//        MaterialButton btnImg = new MaterialButton(requireContext());
-//        btnImg.setText(compra.getImageUri() == null ?
-//                "Agregar imagen" : "Cambiar imagen");
-//        layout.addView(btnImg);
-//
-//        btnImg.setOnClickListener(v -> {
-//            compraEnEdicionParaImagen = compra;
-//            imagePickerLauncher.launch("image/*");
-//        });
-//
-//        new MaterialAlertDialogBuilder(requireContext())
-//                .setTitle("Editar Compra")
-//                .setView(layout)
-//                .setPositiveButton("Guardar", (d, w) -> {
-//                    compra.setName(txtNombre.getText().toString());
-//                    compra.setAmount(Double.parseDouble(txtMonto.getText().toString()));
-//
-//                    refreshList();
-//                    Toast.makeText(requireContext(),
-//                            "Compra actualizada", Toast.LENGTH_SHORT).show();
-//                })
-//                .setNeutralButton("Eliminar", (d, w) -> {
-//                    main.removeCompraById(compra.getId());
-//                    refreshList();
-//                })
-//                .setNegativeButton("Cancelar", null)
-//                .show();
-//    }
-
     private void mostrarDialogoEditarCompra(int purchaseId) {
 
         PurchaseHomeDto compra = buscarCompraPorId(purchaseId);
-        if (compra == null) return;
+        if (compra == null)
+            return;
 
         LinearLayout layout = crearLayoutDialogo();
 
@@ -227,8 +173,7 @@ public class HomeFragment extends Fragment {
         ArrayAdapter<FinancialEntityHomeDto> adpEntidad = new ArrayAdapter<>(
                 requireContext(),
                 android.R.layout.simple_spinner_dropdown_item,
-                main.getEntidades()
-        );
+                main.getEntidades());
         spEntidad.setAdapter(adpEntidad);
         layout.addView(spEntidad);
 
@@ -299,8 +244,7 @@ public class HomeFragment extends Fragment {
                         return;
                     }
 
-                    FinancialEntityHomeDto entidadSeleccionada =
-                            (FinancialEntityHomeDto) spEntidad.getSelectedItem();
+                    FinancialEntityHomeDto entidadSeleccionada = (FinancialEntityHomeDto) spEntidad.getSelectedItem();
 
                     compra.setName(nuevoNombre);
                     compra.setAmount(nuevoMonto);
@@ -317,11 +261,10 @@ public class HomeFragment extends Fragment {
                 .show();
     }
 
-    // ========= HELPERS =========
-
     private PurchaseHomeDto buscarCompraPorId(int id) {
         for (PurchaseHomeDto p : main.getCompras()) {
-            if (p.getId() == id) return p;
+            if (p.getId() == id)
+                return p;
         }
         return null;
     }
@@ -343,8 +286,7 @@ public class HomeFragment extends Fragment {
         ArrayAdapter<FinancialEntityHomeDto> adp = new ArrayAdapter<>(
                 requireContext(),
                 android.R.layout.simple_spinner_dropdown_item,
-                main.getEntidades()
-        );
+                main.getEntidades());
         sp.setAdapter(adp);
         layout.addView(sp);
 
@@ -368,6 +310,7 @@ public class HomeFragment extends Fragment {
         txt.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         return txt;
     }
+
     private void mostrarDialogoVerImagen(String uri) {
         ImageView imageView = new ImageView(requireContext());
         imageView.setAdjustViewBounds(true);
@@ -383,8 +326,6 @@ public class HomeFragment extends Fragment {
                 .show();
     }
 
-
-    // ========= LISTA =========
     private void refreshList() {
         Map<Integer, List<PurchaseHomeDto>> byEntity = new HashMap<>();
         for (PurchaseHomeDto p : main.getCompras()) {
@@ -394,7 +335,8 @@ public class HomeFragment extends Fragment {
         List<HomeListAdapter.Row> rows = new ArrayList<>();
         for (FinancialEntityHomeDto fe : main.getEntidades()) {
             List<PurchaseHomeDto> list = byEntity.get(fe.getId());
-            if (list == null || list.isEmpty()) continue;
+            if (list == null || list.isEmpty())
+                continue;
 
             rows.add(new HomeListAdapter.EntityHeader(fe.getId(), fe.getName()));
             for (PurchaseHomeDto p : list) {

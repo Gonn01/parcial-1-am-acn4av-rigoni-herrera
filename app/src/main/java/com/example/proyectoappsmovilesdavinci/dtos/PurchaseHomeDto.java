@@ -6,7 +6,7 @@ public class PurchaseHomeDto {
     private double amount;
     private String name;
     private int financialEntityId;
-    private String imageUri; // Imagen de factura (opcional)
+    private String imageUri;
 
     public PurchaseHomeDto(
             int id,
@@ -20,14 +20,12 @@ public class PurchaseHomeDto {
         this.financialEntityId = financialEntityId;
     }
 
-    // ---- GETTERS ----
     public int getId() { return id; }
     public double getAmount() { return amount; }
     public String getName() { return name; }
     public int getFinancialEntityId() { return financialEntityId; }
     public String getImageUri() { return imageUri; }
 
-    // ---- SETTERS (para editar) ----
     public void setName(String name) {
         this.name = name;
     }
