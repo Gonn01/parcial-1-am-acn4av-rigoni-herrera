@@ -37,4 +37,7 @@ public class PurchaseHomeDto {
     public void setImageUri(String imageUri) {
         this.imageUri = imageUri;
     }
+    public void setFinancialEntityId(int financialEntityId) {
+        this.financialEntityId = financialEntityId;
+    }
 }
