@@ -1,6 +1,7 @@
 package com.example.proyectoappsmovilesdavinci.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -15,6 +16,8 @@ import com.example.proyectoappsmovilesdavinci.dtos.User;
 import com.example.proyectoappsmovilesdavinci.ui.fragments.FinancialEntitiesFragment;
 import com.example.proyectoappsmovilesdavinci.ui.fragments.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +31,14 @@ public class DashboardActivity extends AppCompatActivity {
     private int nextPurchaseId = 1;
     private BottomNavigationView bottomNav;
     private User user;
+    private FirebaseFirestore db;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         user = (User) getIntent().getSerializableExtra("user");
+        db = FirebaseFirestore.getInstance();
+        cargarDatosDesdeFirestore();
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_dashboard);
         bottomNav = findViewById(R.id.bottom_navigation);
@@ -50,6 +58,46 @@ public class DashboardActivity extends AppCompatActivity {
             swap(f);
             return true;
         });
+    }
+    private void cargarDatosDesdeFirestore() {
+        db.collection("financial_entities")
+                .whereEqualTo("userId", user.getId())
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    entidades.clear();
+                    int maxId = 0;
+                    for (DocumentSnapshot doc : snapshot.getDocuments()) {
+                        Log.e("Firestore", "Entidad: " + doc.getString("name"));
+                        int id = doc.getLong("id").intValue();
+                        if (id > maxId) maxId = id;
+                        FinancialEntityHomeDto fe = new FinancialEntityHomeDto(
+                                doc.getLong("id").intValue(),
+                                doc.getString("name")
+                        );
+                        entidades.add(fe);
+                    }
+                    cargarCompras();
+                });
+    }
+
+    private void cargarCompras() {
+        db.collection("purchases")
+                .whereEqualTo("userId", user.getId())
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    compras.clear();
+                    for (DocumentSnapshot doc : snapshot.getDocuments()) {
+                        Log.e("Firestore", "Compra: " + doc.getString("name"));
+                        PurchaseHomeDto p = new PurchaseHomeDto(
+                                doc.getLong("id").intValue(),
+                                doc.getDouble("amount"),
+                                doc.getString("name"),
+                                doc.getLong("financialEntityId").intValue()
+                        );
+                        compras.add(p);
+                    }
+                    refrescarFragmentActual();
+                });
     }
 
     private void swap(@NonNull Fragment fragment) {
@@ -72,6 +120,14 @@ public class DashboardActivity extends AppCompatActivity {
             }
         }
     }
+    public void refrescarFragmentActual() {
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+
+        if (f instanceof HomeFragment) {
+            ((HomeFragment) f).refreshList();
+        }
+    }
+
     public List<FinancialEntityHomeDto> getEntidades() {
         return entidades;
     }

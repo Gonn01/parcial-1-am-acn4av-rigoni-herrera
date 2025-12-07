@@ -12,6 +12,10 @@ public class User implements Serializable {
         this.name = name;
         this.email = email;
     }
+
+    public String getId() {
+        return uid;
+    }
     public String getName() {
         return name;
     }

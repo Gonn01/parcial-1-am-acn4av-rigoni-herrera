@@ -2,6 +2,7 @@ package com.example.proyectoappsmovilesdavinci.ui.fragments;
 
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import com.example.proyectoappsmovilesdavinci.ui.DashboardActivity;
 import com.example.proyectoappsmovilesdavinci.ui.adapters.dashboard.HomeListAdapter;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -107,6 +109,16 @@ public class HomeFragment extends Fragment {
                         return;
                     }
                     FinancialEntityHomeDto fe = new FinancialEntityHomeDto(main.nextEntityId(), name);
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("id", fe.getId());
+                    data.put("name", fe.getName());
+                    data.put("userId", user.getId());
+                    Log.d("FIRE_TEST", "Guardando entidad: " + data);
+                    FirebaseFirestore.getInstance()
+                            .collection("financial_entities")
+                            .document(String.valueOf(fe.getId()))
+                            .set(data);
+
                     main.addEntidad(fe);
                 })
                 .setNegativeButton("Cancelar", null)
@@ -148,6 +160,17 @@ public class HomeFragment extends Fragment {
                             monto,
                             nombre,
                             fe.getId());
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("id", p.getId());
+                    data.put("name", p.getName());
+                    data.put("amount", p.getAmount());
+                    data.put("financialEntityId", p.getFinancialEntityId());
+                    data.put("userId", user.getId());
+
+                    FirebaseFirestore.getInstance()
+                            .collection("purchases")
+                            .document(String.valueOf(p.getId()))
+                            .set(data);
 
                     main.addCompra(p);
                     refreshList();
@@ -249,12 +272,24 @@ public class HomeFragment extends Fragment {
                     compra.setName(nuevoNombre);
                     compra.setAmount(nuevoMonto);
                     compra.setFinancialEntityId(entidadSeleccionada.getId());
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection("purchases")
+                            .document(String.valueOf(compra.getId()))
+                            .update(
+                                    "name", compra.getName(),
+                                    "amount", compra.getAmount(),
+                                    "financialEntityId", compra.getFinancialEntityId()
+                            );
 
                     refreshList();
                     Toast.makeText(requireContext(), "Compra actualizada", Toast.LENGTH_SHORT).show();
                 })
                 .setNeutralButton("Eliminar", (d, w) -> {
                     main.removeCompraById(compra.getId());
+                    FirebaseFirestore.getInstance()
+                            .collection("purchases")
+                            .document(String.valueOf(compra.getId()))
+                            .delete();
                     refreshList();
                 })
                 .setNegativeButton("Cancelar", null)
@@ -326,7 +361,7 @@ public class HomeFragment extends Fragment {
                 .show();
     }
 
-    private void refreshList() {
+    public  void refreshList() {
         Map<Integer, List<PurchaseHomeDto>> byEntity = new HashMap<>();
         for (PurchaseHomeDto p : main.getCompras()) {
             byEntity.computeIfAbsent(p.getFinancialEntityId(), k -> new ArrayList<>()).add(p);
