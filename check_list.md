@@ -64,8 +64,8 @@ Si falta algo de esta sección → **desaprobado automático**.
 
 ### **Firebase avanzado**
 
-- [ ] Registro + login.
-- [ ] Verificación de email (opcional).
+- [x] Registro + login.
+- [x] Verificación de email (opcional).
 - [x] Traer colección completa desde Firestore.
 
 ### **UI / UX**

@@ -2,7 +2,6 @@ package com.example.proyectoappsmovilesdavinci.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,38 +21,55 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
     private EditText etUsuario, etPassword;
     private Button btnLogin;
     private MaterialCardView btnGoogleLogin;
+
     private FirebaseAuth mAuth;
-    private GoogleSignInClient googleSignInClient;
+    private GoogleSignInClient googleClient;
 
     private static final int RC_GOOGLE = 100;
+
+    private String pendingEmail;
+    private String pendingPassword;
+    private AuthCredential pendingGoogleCredential;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         EdgeToEdge.enable(this);
 
         mAuth = FirebaseAuth.getInstance();
 
-        // 🔥 AUTLOGIN → si ya hay sesión, ir directo al Dashboard
+        // ---------------------------------------
+        // 🔥 AUTLOGIN
+        // ---------------------------------------
         if (mAuth.getCurrentUser() != null) {
-            FirebaseUser firebaseUser = mAuth.getCurrentUser();
-            cargarYEnviarUsuario(firebaseUser);
-            return; // NO seguir cargando la UI del login
+
+            FirebaseUser u = mAuth.getCurrentUser();
+
+            if (!u.isEmailVerified() && u.getProviderData().size() == 2) {
+                mostrarPantallaVerificacion(u);
+                return;
+            }
+
+            cargarYEnviarUsuario(u);
+            return;
         }
 
-        // Si NO hay sesión activa → mostrar login
         setContentView(R.layout.activity_login);
 
         inicializarComponentes();
@@ -79,40 +95,46 @@ public class LoginActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
 
-        googleSignInClient = GoogleSignIn.getClient(this, gso);
+        googleClient = GoogleSignIn.getClient(this, gso);
     }
 
     private void configurarEventos() {
 
-        // Ir a registro
         findViewById(R.id.txtGoRegister).setOnClickListener(v ->
-                startActivity(new Intent(this, RegisterActivity.class))
-        );
+                startActivity(new Intent(this, RegisterActivity.class)));
 
-        // Login con email y contraseña
+        // ---------------------------------------
+        // 🔹 LOGIN EMAIL + PASS
+        // ---------------------------------------
         btnLogin.setOnClickListener(v -> {
-            String email = etUsuario.getText().toString().trim();
-            String password = etPassword.getText().toString().trim();
 
-            if (email.isEmpty() || password.isEmpty()) {
+            pendingEmail = etUsuario.getText().toString().trim();
+            pendingPassword = etPassword.getText().toString().trim();
+
+            if (pendingEmail.isEmpty() || pendingPassword.isEmpty()) {
                 Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnSuccessListener(authResult -> {
-                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                        cargarYEnviarUsuario(firebaseUser);
+            mAuth.signInWithEmailAndPassword(pendingEmail, pendingPassword)
+                    .addOnSuccessListener(r -> {
+
+                        FirebaseUser u = mAuth.getCurrentUser();
+
+                        if (!u.isEmailVerified()) {
+                            mostrarPantallaVerificacion(u);
+                            return;
+                        }
+
+                        cargarYEnviarUsuario(u);
                     })
                     .addOnFailureListener(e ->
-                            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
-                    );
+                            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
         });
 
-        // Login con Google
         btnGoogleLogin.setOnClickListener(v -> {
-            Intent intent = googleSignInClient.getSignInIntent();
-            startActivityForResult(intent, RC_GOOGLE);
+            Intent i = googleClient.getSignInIntent();
+            startActivityForResult(i, RC_GOOGLE);
         });
     }
 
@@ -121,58 +143,133 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_GOOGLE) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            Task<GoogleSignInAccount> task =
+                    GoogleSignIn.getSignedInAccountFromIntent(data);
 
             try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
+                GoogleSignInAccount acc = task.getResult(ApiException.class);
 
-                if (account != null) {
-                    firebaseAuthWithGoogle(account.getIdToken());
-                }
-            } catch (ApiException e) {
-                Toast.makeText(this, "Error al iniciar sesión con Google", Toast.LENGTH_SHORT).show();
+                AuthCredential cred =
+                        GoogleAuthProvider.getCredential(acc.getIdToken(), null);
+
+                loginConGoogle(cred);
+
+            } catch (Exception e) {
+                Toast.makeText(this, "Error iniciando Google", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+    private void loginConGoogle(AuthCredential credential) {
 
         mAuth.signInWithCredential(credential)
-                .addOnSuccessListener(authResult -> {
-                    FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                    cargarYEnviarUsuario(firebaseUser);
+                .addOnSuccessListener(r -> {
+                    cargarYEnviarUsuario(r.getUser());
                 })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Error autenticando con Google", Toast.LENGTH_SHORT).show()
-                );
+                .addOnFailureListener(e -> {
+
+                    if (e instanceof FirebaseAuthUserCollisionException) {
+
+                        FirebaseAuthUserCollisionException ex = (FirebaseAuthUserCollisionException) e;
+
+                        pendingEmail = ex.getEmail();
+                        pendingGoogleCredential = credential;
+
+                        manejarCuentaDuplicada(pendingEmail);
+
+                    } else {
+                        Toast.makeText(this, "Error Google Login", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
-    // ⭐ Obtiene el nombre REAL desde Firestore o Google según corresponda
+    private void manejarCuentaDuplicada(String email) {
+
+        mAuth.fetchSignInMethodsForEmail(email)
+                .addOnSuccessListener(result -> {
+
+                    List<String> providers = result.getSignInMethods();
+
+                    if (providers.contains("password")) {
+                        pedirPasswordParaLinkear(email);
+                    } else {
+                        Toast.makeText(this, "No se puede vincular la cuenta.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void pedirPasswordParaLinkear(String email) {
+
+        EditText input = new EditText(this);
+        input.setHint("Ingresá tu contraseña");
+
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Vincular cuenta")
+                .setMessage("Tu email ya está registrado. Ingresá tu contraseña para linkear Google.")
+                .setView(input)
+                .setPositiveButton("Vincular", (d, w) -> {
+
+                    String pass = input.getText().toString().trim();
+                    AuthCredential passCred =
+                            EmailAuthProvider.getCredential(email, pass);
+
+                    // Loguear con email+pass
+                    mAuth.signInWithEmailAndPassword(email, pass)
+                            .addOnSuccessListener(result -> {
+
+                                FirebaseUser u = mAuth.getCurrentUser();
+
+                                u.linkWithCredential(pendingGoogleCredential)
+                                        .addOnSuccessListener(r2 -> cargarYEnviarUsuario(r2.getUser()))
+                                        .addOnFailureListener(e ->
+                                                Toast.makeText(this, "No se pudo vincular Google", Toast.LENGTH_SHORT).show());
+                            })
+                            .addOnFailureListener(e ->
+                                    Toast.makeText(this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show());
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    private void mostrarPantallaVerificacion(FirebaseUser user) {
+
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Verifica tu email")
+                .setMessage("Revisá tu correo y verificá la cuenta antes de ingresar.\n\nEmail: " + user.getEmail())
+                .setPositiveButton("Reenviar correo", (d, w) -> {
+
+                    user.sendEmailVerification()
+                            .addOnSuccessListener(a ->
+                                    Toast.makeText(this, "Correo reenviado", Toast.LENGTH_SHORT).show())
+                            .addOnFailureListener(a ->
+                                    Toast.makeText(this, "Error reenviando correo", Toast.LENGTH_SHORT).show());
+
+                })
+                .setNegativeButton("Cerrar sesión", (d, w) -> mAuth.signOut())
+                .show();
+    }
+
     private void cargarYEnviarUsuario(FirebaseUser firebaseUser) {
-        String uid = firebaseUser.getUid();
-        String email = firebaseUser.getEmail();
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        db.collection("users")
-                .document(uid)
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(firebaseUser.getUid())
                 .get()
                 .addOnSuccessListener(doc -> {
 
-                    String name;
+                    String name = doc.exists() && doc.getString("name") != null
+                            ? doc.getString("name")
+                            : (firebaseUser.getDisplayName() != null
+                            ? firebaseUser.getDisplayName()
+                            : "Usuario");
 
-                    if (doc.exists() && doc.getString("name") != null) {
-                        name = doc.getString("name"); // nombre del registro
-                    } else {
-                        name = firebaseUser.getDisplayName() != null
-                                ? firebaseUser.getDisplayName()
-                                : "Usuario";
-                    }
+                    User myUser = new User(
+                            firebaseUser.getUid(),
+                            name,
+                            firebaseUser.getEmail()
+                    );
 
-                    User myUser = new User(uid, name, email);
-
-                    Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                    Intent intent = new Intent(this, DashboardActivity.class);
                     intent.putExtra("user", myUser);
                     startActivity(intent);
                     finish();
