@@ -33,71 +33,100 @@ public class DashboardActivity extends AppCompatActivity {
     private User user;
     private FirebaseFirestore db;
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        EdgeToEdge.enable(this);
+
         user = (User) getIntent().getSerializableExtra("user");
         db = FirebaseFirestore.getInstance();
-        cargarDatosDesdeFirestore();
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_dashboard);
-        bottomNav = findViewById(R.id.bottom_navigation);
 
         if (savedInstanceState == null) {
-            swap(new HomeFragment());
-            bottomNav.setSelectedItemId(R.id.nav_home);
+            cargarDatosDesdeFirestore();
+        } else {
+            setContentView(R.layout.activity_dashboard);
+            bottomNav = findViewById(R.id.bottom_navigation);
         }
-
-        bottomNav.setOnItemSelectedListener(item -> {
-            Fragment f;
-            if (item.getItemId() == R.id.nav_home) {
-                f = new HomeFragment();
-            } else {
-                f = new FinancialEntitiesFragment();
-            }
-            swap(f);
-            return true;
-        });
     }
+
     private void cargarDatosDesdeFirestore() {
+
+        db.collection("users")
+                .document(user.getId())
+                .get()
+                .addOnSuccessListener(doc -> {
+
+                    if (doc.exists()) {
+                        String name = doc.getString("name");
+                        user = new User(user.getId(), name, user.getEmail());
+                    }
+
+                    cargarEntidades();  // 🔥 continuar recién cuando termine
+                });
+    }
+
+    private void cargarEntidades() {
+
         db.collection("financial_entities")
                 .whereEqualTo("userId", user.getId())
                 .get()
                 .addOnSuccessListener(snapshot -> {
+
                     entidades.clear();
                     int maxId = 0;
+
                     for (DocumentSnapshot doc : snapshot.getDocuments()) {
-                        Log.e("Firestore", "Entidad: " + doc.getString("name"));
                         int id = doc.getLong("id").intValue();
                         if (id > maxId) maxId = id;
-                        FinancialEntityHomeDto fe = new FinancialEntityHomeDto(
-                                doc.getLong("id").intValue(),
+
+                        entidades.add(new FinancialEntityHomeDto(
+                                id,
                                 doc.getString("name")
-                        );
-                        entidades.add(fe);
+                        ));
                     }
-                    cargarCompras();
+
+                    cargarCompras(); // 🔥 continuar cuando termine
                 });
     }
 
     private void cargarCompras() {
+
         db.collection("purchases")
                 .whereEqualTo("userId", user.getId())
                 .get()
                 .addOnSuccessListener(snapshot -> {
+
                     compras.clear();
+
                     for (DocumentSnapshot doc : snapshot.getDocuments()) {
-                        Log.e("Firestore", "Compra: " + doc.getString("name"));
-                        PurchaseHomeDto p = new PurchaseHomeDto(
+                        compras.add(new PurchaseHomeDto(
                                 doc.getLong("id").intValue(),
                                 doc.getDouble("amount"),
                                 doc.getString("name"),
                                 doc.getLong("financialEntityId").intValue()
-                        );
-                        compras.add(p);
+                        ));
                     }
-                    refrescarFragmentActual();
+
+                    // 🔥 AHORA SÍ: ya tengo TODO → recién acá muestro UI
+                    iniciarUI();
                 });
+    }
+
+    private void iniciarUI() {
+        setContentView(R.layout.activity_dashboard);
+        bottomNav = findViewById(R.id.bottom_navigation);
+
+        swap(new HomeFragment()); // ahora sí, con user cargado
+
+        bottomNav.setOnItemSelectedListener(item -> {
+            Fragment f = (item.getItemId() == R.id.nav_home)
+                    ? new HomeFragment()
+                    : new FinancialEntitiesFragment();
+
+            swap(f);
+            return true;
+        });
     }
 
     private void swap(@NonNull Fragment fragment) {

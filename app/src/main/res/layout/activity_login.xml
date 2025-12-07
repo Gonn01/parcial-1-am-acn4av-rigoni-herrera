@@ -110,6 +110,13 @@
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
+<TextView
+    android:id="@+id/txtGoRegister"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="¿No tenés cuenta? Registrate"
+    android:textColor="@color/purple_200"
+    android:paddingTop="16dp"/>
 
         </LinearLayout>
 

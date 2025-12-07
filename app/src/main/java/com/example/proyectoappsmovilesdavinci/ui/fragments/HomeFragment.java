@@ -1,5 +1,6 @@
 package com.example.proyectoappsmovilesdavinci.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -27,9 +28,13 @@ import com.example.proyectoappsmovilesdavinci.dtos.FinancialEntityHomeDto;
 import com.example.proyectoappsmovilesdavinci.dtos.PurchaseHomeDto;
 import com.example.proyectoappsmovilesdavinci.dtos.User;
 import com.example.proyectoappsmovilesdavinci.ui.DashboardActivity;
+import com.example.proyectoappsmovilesdavinci.ui.LoginActivity;
 import com.example.proyectoappsmovilesdavinci.ui.adapters.dashboard.HomeListAdapter;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -55,6 +60,7 @@ public class HomeFragment extends Fragment {
         if (getArguments() != null) {
             user = (User) getArguments().getSerializable("user");
         }
+
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -76,16 +82,25 @@ public class HomeFragment extends Fragment {
                     }
                     compraEnEdicionParaImagen = null;
                 });
+        MaterialButton logoutBtn = view.findViewById(R.id.btnLogout);
+        logoutBtn.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
 
+            GoogleSignIn.getClient(
+                    requireContext(),
+                    new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
+            ).signOut();
+
+            startActivity(new Intent(requireContext(), LoginActivity.class));
+            requireActivity().finish();
+        });
         RecyclerView recyclerView = view.findViewById(R.id.rvHome);
         MaterialButton botonCrearEntidad = view.findViewById(R.id.crear_entidad_financiera);
         MaterialButton botonCrearCompra = view.findViewById(R.id.crear_compra);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        listAdapter = new HomeListAdapter(purchaseId -> {
-            mostrarDialogoEditarCompra(purchaseId);
-        });
+        listAdapter = new HomeListAdapter(this::mostrarDialogoEditarCompra);
         recyclerView.setAdapter(listAdapter);
 
         botonCrearEntidad.setOnClickListener(v -> dialogCrearEntidad());

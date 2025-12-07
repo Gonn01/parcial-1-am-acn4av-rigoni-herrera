@@ -13,6 +13,9 @@ public class User implements Serializable {
         this.email = email;
     }
 
+    public String getEmail() {
+        return email;
+    }
     public String getId() {
         return uid;
     }
