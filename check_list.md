@@ -85,11 +85,11 @@ Si falta algo de esta sección → **desaprobado automático**.
 
 - [ ] Descarga de imágenes desde URL.
 - [x] Traer contenido desde internet con librerías (Glide, Retrofit, etc.).
-- [ ] Notificaciones al usuario con Toast.
+- [x] Notificaciones al usuario con Toast.
 - [ ] Operaciones CRUD con Firestore:
   - [ ] Editar información del usuario.
-  - [ ] Agregar documentos.
-  - [ ] Relacionar datos entre colecciones.
+  - [x] Agregar documentos.
+  - [x] Relacionar datos entre colecciones.
 
 ### **Uso de commits**
 
