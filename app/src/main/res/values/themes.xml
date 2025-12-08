@@ -45,4 +45,32 @@
         <item name="android:textColor">@color/text_primary</item>
     </style>
 
+    <style name="DarkInputRegister" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+
+        <!-- Fondo del input -->
+        <item name="boxBackgroundColor">@color/dark_surface</item>
+
+        <!-- Borde normal -->
+        <item name="boxStrokeColor">@color/text_secondary</item>
+
+        <!-- Borde cuando está activo (usa colorControlActivated) -->
+        <item name="colorOnSurface">@color/green_action</item>
+        <item name="colorControlActivated">@color/green_action</item>
+
+        <!-- Hint normal -->
+        <item name="hintTextColor">@color/text_secondary</item>
+
+        <!-- Texto dentro -->
+        <item name="android:textColor">@color/text_primary</item>
+
+        <!-- Bordes redondeados -->
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
+    </style>
+
+
 </resources>

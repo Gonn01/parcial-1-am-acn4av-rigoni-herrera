@@ -11,4 +11,5 @@
     <color name="text_secondary">#A5B5AF</color>
 
     <color name="border_dark">#2E3C35</color>
+    <color name="dark_surface">#1A2B24</color>
 </resources>

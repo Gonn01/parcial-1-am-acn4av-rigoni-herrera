@@ -21,7 +21,7 @@
     <string name="register_email">Email</string>
     <string name="register_password">Contraseña</string>
     <string name="register_button">Registrarse</string>
-    <string name="register_go_to_login">¿Ya tenés cuenta? Iniciar sesión</string>
+    <string name="register_go_login">¿Ya tenés cuenta? Iniciar sesión</string>
 
     <!-- Home / Dashboard -->
     <string name="dashboard_title">Dashboard</string>
