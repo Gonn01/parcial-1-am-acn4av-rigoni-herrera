@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:padding="24dp">
 
-        <!-- Título -->
         <TextView
             android:id="@+id/txtRegisterTitle"
             android:layout_width="wrap_content"
@@ -18,7 +17,7 @@
             android:text="@string/register_title"
             android:textSize="28sp"
             android:textStyle="bold"
-            android:textColor="@color/text_primary"
+            android:textColor="@color/white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -37,6 +36,8 @@
                 android:id="@+id/etRegisterName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColorHint="@color/white"
+                android:textColor="@color/white"
                 android:hint="@string/register_fullname" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -55,11 +56,13 @@
                 android:id="@+id/etRegisterEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColorHint="@color/white"
+                android:textColor="@color/white"
                 android:inputType="textEmailAddress"
                 android:hint="@string/register_email" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Contraseña -->
+        <!-- Password -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/inputPassLayout"
             style="@style/DarkInputRegister"
@@ -74,11 +77,13 @@
                 android:id="@+id/etRegisterPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/register_password"
-                android:inputType="textPassword" />
+                android:textColorHint="@color/white"
+                android:textColor="@color/white"
+                android:inputType="textPassword"
+                android:hint="@string/register_password" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Botón Crear cuenta -->
+        <!-- Botón -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRegister"
             android:layout_width="0dp"
@@ -89,7 +94,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Link a Login -->
         <TextView
             android:id="@+id/txtGoLogin"
             android:layout_width="wrap_content"

@@ -46,31 +46,29 @@
     </style>
 
     <style name="DarkInputRegister" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-
         <!-- Fondo del input -->
         <item name="boxBackgroundColor">@color/dark_surface</item>
 
-        <!-- Borde normal -->
-        <item name="boxStrokeColor">@color/text_secondary</item>
+        <!-- Borde normal: blanco -->
+        <item name="boxStrokeColor">@color/white</item>
 
-        <!-- Borde cuando está activo (usa colorControlActivated) -->
-        <item name="colorOnSurface">@color/green_action</item>
+        <!-- Borde cuando está enfocado: verde -->
+        <item name="boxStrokeColorFocused">@color/green_action</item>
+
+        <!-- Hint (texto guía) color blanco -->
+        <item name="hintTextColor">@color/white</item>
+
+        <!-- Texto que escribe el usuario -->
+        <item name="android:textColor">@color/white</item>
+
+        <!-- Color del icono / activado -->
         <item name="colorControlActivated">@color/green_action</item>
 
-        <!-- Hint normal -->
-        <item name="hintTextColor">@color/text_secondary</item>
-
-        <!-- Texto dentro -->
-        <item name="android:textColor">@color/text_primary</item>
-
-        <!-- Bordes redondeados -->
+        <!-- Radios redondeados -->
         <item name="boxCornerRadiusTopStart">12dp</item>
         <item name="boxCornerRadiusTopEnd">12dp</item>
         <item name="boxCornerRadiusBottomStart">12dp</item>
         <item name="boxCornerRadiusBottomEnd">12dp</item>
     </style>
-
 
 </resources>

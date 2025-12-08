@@ -22,6 +22,8 @@
     <string name="register_password">Contraseña</string>
     <string name="register_button">Registrarse</string>
     <string name="register_go_login">¿Ya tenés cuenta? Iniciar sesión</string>
+    <!-- Home / fragment -->
+    <string name="crear_compra">Crear compra</string>
 
     <!-- Home / Dashboard -->
     <string name="dashboard_title">Dashboard</string>
