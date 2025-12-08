@@ -327,7 +327,7 @@ public class HomeFragment extends Fragment {
         return layout;
     }
 
-    private Spinner crearSpinnerEntidades(LinearLayout layout) {
+/*    private Spinner crearSpinnerEntidades(LinearLayout layout) {
         TextView lbl = new TextView(requireContext());
         lbl.setText("Entidad");
         layout.addView(lbl);
@@ -341,7 +341,35 @@ public class HomeFragment extends Fragment {
         layout.addView(sp);
 
         return sp;
+    }*/
+
+
+
+    private Spinner crearSpinnerEntidades(LinearLayout layout) {
+
+        TextView lbl = new TextView(requireContext());
+        lbl.setText("Entidad");
+        lbl.setTextColor(getResources().getColor(R.color.text_primary));
+        lbl.setPadding(0, 10, 0, 10);
+        layout.addView(lbl);
+
+        Spinner sp = new Spinner(requireContext());
+        sp.setBackgroundResource(R.drawable.bg_spinner);
+        layout.addView(sp);
+
+        ArrayAdapter<FinancialEntityHomeDto> adp = new ArrayAdapter<>(
+                requireContext(),
+                R.layout.item_spinner_dark,         // vista cerrada
+                main.getEntidades()
+        );
+
+        adp.setDropDownViewResource(R.layout.item_spinner_dropdown_dark);
+
+        sp.setAdapter(adp);
+
+        return sp;
     }
+
 
     private EditText crearCampoTexto(LinearLayout layout, String label, String hint) {
         TextView lbl = new TextView(requireContext());

@@ -1,9 +1,48 @@
 <resources>
+
+    <!-- Nombre de la app -->
     <string name="app_name">Proyecto Apps Moviles Da Vinci</string>
+
+    <!-- Tabs -->
     <string name="tab_home">Home</string>
     <string name="tab_financial_entities">Entidades Financieras</string>
-    <string name="create_purchase">Crear Compra</string>
+
+    <!-- Login -->
+    <string name="login_title">Iniciar sesión</string>
+    <string name="login_email">Email</string>
+    <string name="login_password">Contraseña</string>
+    <string name="login_button">Ingresar</string>
+    <string name="login_no_account">¿No tenés cuenta? Crear cuenta</string>
+    <string name="login_forgot_password">¿Olvidaste tu contraseña?</string>
+
+    <!-- Register -->
+    <string name="register_title">Crear cuenta</string>
+    <string name="register_fullname">Nombre completo</string>
+    <string name="register_email">Email</string>
+    <string name="register_password">Contraseña</string>
+    <string name="register_button">Registrarse</string>
+    <string name="register_go_to_login">¿Ya tenés cuenta? Iniciar sesión</string>
+
+    <!-- Home / Dashboard -->
+    <string name="dashboard_title">Dashboard</string>
+    <string name="dashboard_balance">Balance total</string>
+    <string name="dashboard_entities">Entidades financieras</string>
+
+    <!-- Finanzas -->
+    <string name="create_purchase">Crear compra</string>
     <string name="create_financial_entity">Crear Entidad Financiera</string>
-    <string name="url_logo_google">https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/2048px-Google_%22G%22_logo.svg.png</string>
-    <string name="default_web_client_id">904950174900-d24ipe2g8606fplqlmb2agu960710udv.apps.googleusercontent.com</string>
+
+    <!-- Mensajes generales -->
+    <string name="error_fields_required">Todos los campos son obligatorios</string>
+    <string name="error_invalid_email">Email inválido</string>
+    <string name="success_register">Registro exitoso</string>
+
+    <!-- Recursos externos -->
+    <string name="url_logo_google">
+        https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/2048px-Google_%22G%22_logo.svg.png
+    </string>
+    <string name="default_web_client_id">
+        904950174900-d24ipe2g8606fplqlmb2agu960710udv.apps.googleusercontent.com
+    </string>
+
 </resources>
