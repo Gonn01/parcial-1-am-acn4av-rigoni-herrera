@@ -1,9 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Proyecto Apps Moviles Da Vinci</string>
+
+    <!-- APP -->
+    <string name="app_name">Proyecto Apps Móviles DaVinci</string>
+
+    <!-- LOGIN -->
+    <string name="login_user">Usuario</string>
+    <string name="login_password">Contraseña</string>
+    <string name="login_button">Ingresar</string>
+    <string name="login_google">Continuar con Google</string>
+    <string name="login_no_account">¿No tenés cuenta? Registrate</string>
+    <string name="login_error_empty">Completa todos los campos</string>
+    <string name="login_error_generic">Error: %1$s</string>
+
+    <!-- REGISTER -->
+    <string name="register_title">Crear cuenta</string>
+    <string name="register_fullname">Nombre completo</string>
+    <string name="register_email">Correo electrónico</string>
+    <string name="register_password">Contraseña</string>
+    <string name="register_button">Crear cuenta</string>
+    <string name="register_go_login">¿Ya tenés cuenta? Iniciar sesión</string>
+    <string name="register_error_empty">Completa todos los campos</string>
+    <string name="register_created">Cuenta creada. Verificá tu email antes de ingresar.</string>
+    <string name="register_existing_google">Ese correo ya está registrado con Google. ¿Querés agregarle una contraseña?</string>
+    <string name="register_link_password">Vincular contraseña</string>
+
+    <!-- DASHBOARD -->
+    <string name="welcome">Bienvenido!</string>
+    <string name="logout">Salir</string>
+
+    <!-- FINANCIAL ENTITIES -->
+    <string name="create_financial_entity">Crear entidad financiera</string>
+    <string name="entity">Entidad</string>
+    <string name="entity_delete_confirm">¿Seguro que querés eliminar esta entidad?</string>
+    <string name="entity_delete_button">Eliminar</string>
+    <string name="entity_delete_cancel">Cancelar</string>
     <string name="tab_home">Home</string>
-    <string name="tab_financial_entities">Entidades Financieras</string>
-    <string name="create_purchase">Crear Compra</string>
-    <string name="create_financial_entity">Crear Entidad Financiera</string>
-    <string name="url_logo_google">https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/2048px-Google_%22G%22_logo.svg.png</string>
-    <string name="default_web_client_id">904950174900-d24ipe2g8606fplqlmb2agu960710udv.apps.googleusercontent.com</string>
+    <string name="tab_financial_entities">Entidades</string>
+    <string name="icon_delete">Eliminar entidad</string>
+
+
+    <!-- PURCHASES -->
+    <string name="create_purchase">Crear compra</string>
+    <string name="purchase_name">Nombre de la compra</string>
+    <string name="purchase_amount">Monto</string>
+    <string name="purchase_example_name">Ej: Spotify</string>
+    <string name="purchase_example_amount">1999.99</string>
+    <string name="purchase_image">Imagen de factura</string>
+    <string name="purchase_image_add">Agregar imagen</string>
+    <string name="purchase_image_change">Cambiar imagen</string>
+    <string name="purchase_image_view">Ver imagen</string>
+    <string name="purchase_update">Compra actualizada</string>
+    <string name="purchase_delete">Eliminar compra</string>
+    <string name="purchase_invalid_amount">Monto inválido</string>
+
+
+    <!-- FIREBASE / GOOGLE -->
+    <string name="firebase_verify_email_title">Verifica tu email</string>
+    <string name="firebase_verify_email_msg">Revisá tu correo y verificá la cuenta antes de ingresar.</string>
+    <string name="firebase_resend_email">Reenviar correo</string>
+    <string name="firebase_close_session">Cerrar sesión</string>
+    <string name="firebase_google_error">Error iniciando Google</string>
+    <string name="firebase_google_link_error">No se pudo vincular Google</string>
+    <string name="entity_default_name">Entidad</string>
+    <string name="delete_entity">Eliminar entidad</string>
+    <string name="icon_entity">Icono de entidad</string>
+
+
+
+    <!-- URLS / LOGOS -->
+    <string name="url_logo_google">https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png</string>
+
 </resources>

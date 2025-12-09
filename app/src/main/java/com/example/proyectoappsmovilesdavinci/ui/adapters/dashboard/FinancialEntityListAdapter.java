@@ -3,6 +3,7 @@ package com.example.proyectoappsmovilesdavinci.ui.adapters.dashboard;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,18 @@ import java.util.List;
 
 public class FinancialEntityListAdapter extends RecyclerView.Adapter<FinancialEntityListAdapter.EntityVH> {
 
+    // 1. Listener para avisar al Fragment que se quiere eliminar una entidad
+    public interface OnDeleteEntityListener {
+        void onDelete(FinancialEntityHomeDto entity);
+    }
+
+    private OnDeleteEntityListener deleteListener;
+
+    public void setOnDeleteEntityListener(OnDeleteEntityListener listener) {
+        this.deleteListener = listener;
+    }
+
+    // Lista existente
     private final List<FinancialEntityHomeDto> entities = new ArrayList<>();
 
     public void setEntities(List<FinancialEntityHomeDto> newEntities) {
@@ -28,13 +41,22 @@ public class FinancialEntityListAdapter extends RecyclerView.Adapter<FinancialEn
     @Override
     public EntityVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_entity_header, parent, false);
+                .inflate(R.layout.item_entity_header_deletable, parent, false);
         return new EntityVH(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull EntityVH holder, int position) {
-        holder.txt.setText(entities.get(position).getName());
+        FinancialEntityHomeDto entity = entities.get(position);
+
+        // Mostrar el nombre
+        holder.txt.setText(entity.getName());
+
+        holder.btnDelete.setOnClickListener(v -> {
+            if (deleteListener != null) {
+                deleteListener.onDelete(entity);
+            }
+        });
     }
 
     @Override
@@ -43,10 +65,18 @@ public class FinancialEntityListAdapter extends RecyclerView.Adapter<FinancialEn
     }
 
     static class EntityVH extends RecyclerView.ViewHolder {
+
         final TextView txt;
+        final ImageView btnDelete; //  3. Referencia al botón X del layout
+
         EntityVH(@NonNull View itemView) {
             super(itemView);
+
             txt = itemView.findViewById(R.id.txtEntityName);
+
+            // buscar la X dentro del layout item_entity_header.xml
+            btnDelete = itemView.findViewById(R.id.btnDeleteEntity);
         }
+
     }
 }

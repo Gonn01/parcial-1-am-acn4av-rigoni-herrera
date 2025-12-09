@@ -70,7 +70,8 @@ public final class HomeListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     ) {
         LayoutInflater inf = LayoutInflater.from(parent.getContext());
         if (viewType == VT_ENTITY) {
-            View v = inf.inflate(R.layout.item_entity_header, parent, false);
+            View v = inf.inflate(R.layout.
+                    item_entity_header, parent, false);
             return new EntityVH(v);
         } else {
             View v = inf.inflate(R.layout.item_purchase, parent, false);

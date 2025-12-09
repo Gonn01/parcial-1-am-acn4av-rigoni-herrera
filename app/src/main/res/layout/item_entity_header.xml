@@ -1,7 +1,20 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/txtEntityName"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="horizontal"
     android:padding="16dp"
-    android:textStyle="bold"
-    android:textSize="18sp"/>
+    android:gravity="center_vertical"
+    android:background="@drawable/bg_entity_item">
+
+    <TextView
+        android:id="@+id/txtEntityName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Entidad"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/white" />
+
+</LinearLayout>
+

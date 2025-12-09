@@ -54,8 +54,8 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
-            @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         main = (DashboardActivity) requireActivity();
         if (getArguments() != null) {
             user = (User) getArguments().getSerializable("user");
@@ -66,7 +66,7 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view,
-            @Nullable Bundle savedInstanceState) {
+                              @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         TextView welcomeTxt = view.findViewById(R.id.welcome);
         welcomeTxt.setText("Bienvenido, " + user.getName() + "!");
@@ -82,6 +82,7 @@ public class HomeFragment extends Fragment {
                     }
                     compraEnEdicionParaImagen = null;
                 });
+
         MaterialButton logoutBtn = view.findViewById(R.id.btnLogout);
         logoutBtn.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
@@ -94,12 +95,12 @@ public class HomeFragment extends Fragment {
             startActivity(new Intent(requireContext(), LoginActivity.class));
             requireActivity().finish();
         });
+
         RecyclerView recyclerView = view.findViewById(R.id.rvHome);
         MaterialButton botonCrearEntidad = view.findViewById(R.id.crear_entidad_financiera);
         MaterialButton botonCrearCompra = view.findViewById(R.id.crear_compra);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-
         listAdapter = new HomeListAdapter(this::mostrarDialogoEditarCompra);
         recyclerView.setAdapter(listAdapter);
 
@@ -123,12 +124,14 @@ public class HomeFragment extends Fragment {
                                 "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show();
                         return;
                     }
+
                     FinancialEntityHomeDto fe = new FinancialEntityHomeDto(main.nextEntityId(), name);
+
                     Map<String, Object> data = new HashMap<>();
                     data.put("id", fe.getId());
                     data.put("name", fe.getName());
                     data.put("userId", user.getId());
-                    Log.d("FIRE_TEST", "Guardando entidad: " + data);
+
                     FirebaseFirestore.getInstance()
                             .collection("financial_entities")
                             .document(String.valueOf(fe.getId()))
@@ -175,6 +178,7 @@ public class HomeFragment extends Fragment {
                             monto,
                             nombre,
                             fe.getId());
+
                     Map<String, Object> data = new HashMap<>();
                     data.put("id", p.getId());
                     data.put("name", p.getName());
@@ -194,6 +198,9 @@ public class HomeFragment extends Fragment {
                 .show();
     }
 
+    // ----------------------------------------------------------
+    // 🔥 MÉTODO COMPLETO MODIFICADO: EDITAR COMPRA (SPINNER DARK)
+    // ----------------------------------------------------------
     private void mostrarDialogoEditarCompra(int purchaseId) {
 
         PurchaseHomeDto compra = buscarCompraPorId(purchaseId);
@@ -202,20 +209,27 @@ public class HomeFragment extends Fragment {
 
         LinearLayout layout = crearLayoutDialogo();
 
-        // === SPINNER DE ENTIDAD (PRE- SELECCIONADO) ===
+        // === LABEL DE ENTIDAD ===
         TextView lblEntidad = new TextView(requireContext());
         lblEntidad.setText("Entidad financiera");
+        lblEntidad.setTextColor(getResources().getColor(R.color.text_primary));
+        lblEntidad.setPadding(0, 10, 0, 10);
         layout.addView(lblEntidad);
 
+        // SPINNER O
         Spinner spEntidad = new Spinner(requireContext());
-        ArrayAdapter<FinancialEntityHomeDto> adpEntidad = new ArrayAdapter<>(
-                requireContext(),
-                android.R.layout.simple_spinner_dropdown_item,
-                main.getEntidades());
-        spEntidad.setAdapter(adpEntidad);
+        spEntidad.setBackgroundResource(R.drawable.bg_spinner_dark);
         layout.addView(spEntidad);
 
-        // Preseleccionar la entidad actual
+        ArrayAdapter<FinancialEntityHomeDto> adpEntidad = new ArrayAdapter<>(
+                requireContext(),
+                R.layout.item_spinner_dark,   // vista cerrada
+                main.getEntidades()
+        );
+        adpEntidad.setDropDownViewResource(R.layout.item_spinner_dropdown_dark); // lista desplegable dark
+        spEntidad.setAdapter(adpEntidad);
+
+        // Preseleccionar entidad actual
         int index = 0;
         for (int i = 0; i < main.getEntidades().size(); i++) {
             if (main.getEntidades().get(i).getId() == compra.getFinancialEntityId()) {
@@ -224,17 +238,20 @@ public class HomeFragment extends Fragment {
             }
         }
         spEntidad.setSelection(index);
+        // ⭐⭐⭐ FIN SPINNER DARK ⭐⭐⭐
 
-        // === CAMPOS PRE-LLENADOS ===
+
+        // --- CAMPOS ---
         EditText txtNombre = crearCampoTexto(layout, "Nombre", "");
         txtNombre.setText(compra.getName());
 
         EditText txtMonto = crearCampoNumero(layout, "Monto", "");
         txtMonto.setText(String.valueOf(compra.getAmount()));
 
-        // === Imagen ===
+        // --- IMAGEN ---
         TextView lblImg = new TextView(requireContext());
         lblImg.setText("Imagen de factura");
+        lblImg.setTextColor(getResources().getColor(R.color.text_primary));
         layout.addView(lblImg);
 
         MaterialButton btnImg = new MaterialButton(requireContext());
@@ -246,7 +263,6 @@ public class HomeFragment extends Fragment {
             imagePickerLauncher.launch("image/*");
         });
 
-        // === Botón Ver imagen ===
         if (compra.getImageUri() != null) {
             MaterialButton btnVerImg = new MaterialButton(requireContext());
             btnVerImg.setText("Ver imagen");
@@ -255,7 +271,7 @@ public class HomeFragment extends Fragment {
             btnVerImg.setOnClickListener(v -> mostrarDialogoVerImagen(compra.getImageUri()));
         }
 
-        // === DIALOGO ===
+        // --- DIALOGO ---
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Editar Compra")
                 .setView(layout)
@@ -282,11 +298,13 @@ public class HomeFragment extends Fragment {
                         return;
                     }
 
-                    FinancialEntityHomeDto entidadSeleccionada = (FinancialEntityHomeDto) spEntidad.getSelectedItem();
+                    FinancialEntityHomeDto entidadSeleccionada =
+                            (FinancialEntityHomeDto) spEntidad.getSelectedItem();
 
                     compra.setName(nuevoNombre);
                     compra.setAmount(nuevoMonto);
                     compra.setFinancialEntityId(entidadSeleccionada.getId());
+
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     db.collection("purchases")
                             .document(String.valueOf(compra.getId()))
@@ -328,24 +346,33 @@ public class HomeFragment extends Fragment {
     }
 
     private Spinner crearSpinnerEntidades(LinearLayout layout) {
+
         TextView lbl = new TextView(requireContext());
         lbl.setText("Entidad");
+        lbl.setTextColor(getResources().getColor(R.color.text_primary));
+        lbl.setPadding(0, 10, 0, 10);
         layout.addView(lbl);
 
         Spinner sp = new Spinner(requireContext());
+        sp.setBackgroundResource(R.drawable.bg_spinner_dark);
+        layout.addView(sp);
+
         ArrayAdapter<FinancialEntityHomeDto> adp = new ArrayAdapter<>(
                 requireContext(),
-                android.R.layout.simple_spinner_dropdown_item,
-                main.getEntidades());
+                R.layout.item_spinner_dark,
+                main.getEntidades()
+        );
+        adp.setDropDownViewResource(R.layout.item_spinner_dropdown_dark);
         sp.setAdapter(adp);
-        layout.addView(sp);
 
         return sp;
     }
 
+
     private EditText crearCampoTexto(LinearLayout layout, String label, String hint) {
         TextView lbl = new TextView(requireContext());
         lbl.setText(label);
+        lbl.setTextColor(getResources().getColor(R.color.text_primary));
         layout.addView(lbl);
 
         EditText txt = new EditText(requireContext());
@@ -366,7 +393,6 @@ public class HomeFragment extends Fragment {
         imageView.setAdjustViewBounds(true);
         imageView.setPadding(16, 16, 16, 16);
 
-        // Carga la imagen desde la URI
         imageView.setImageURI(android.net.Uri.parse(uri));
 
         new MaterialAlertDialogBuilder(requireContext())
@@ -376,7 +402,7 @@ public class HomeFragment extends Fragment {
                 .show();
     }
 
-    public  void refreshList() {
+    public void refreshList() {
         Map<Integer, List<PurchaseHomeDto>> byEntity = new HashMap<>();
         for (PurchaseHomeDto p : main.getCompras()) {
             byEntity.computeIfAbsent(p.getFinancialEntityId(), k -> new ArrayList<>()).add(p);

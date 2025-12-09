@@ -1,15 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#BB86FC</color>
-    <color name="purple_700">#3700B3</color>
-    <color name="teal_200">#03DAC5</color>
-    <color name="black">#000000</color>
-    <color name="white">#FFFFFF</color>
-    <color name="gray">#BDBDBD</color>
-
-    <!-- Colores Material Design -->
-    <color name="purple_500">#6200EE</color>
 
     <!-- Fondo general -->
-    <color name="background_light">#F5F5F5</color>
+    <color name="bg_dark">#0F1C14</color>
+    <color name="dark_bg">#07150F</color>
+
+    <!-- Cards -->
+    <color name="card_dark">#1A2B24</color>
+    <color name="card_dark_secondary">#1E3A32</color>
+
+    <!-- Acciones -->
+    <color name="green_action">#2ECC71</color>
+    <color name="green_dark">#27AE60</color>
+    <color name="danger_red">#FF4D4D</color>
+
+
+    <!-- Texto -->
+    <color name="white">#FFFFFFFF</color>
+    <color name="white_50">#80FFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#A5B5AF</color>
+
+    <!-- Bordes -->
+    <color name="border_dark">#2E3C35</color>
+    <color name="input_border_default">#FFFFFFFF</color>
+
+    <!-- Superficies -->
+    <color name="dark_surface">#1A2B24</color>
+
+    <!-- Transparencias -->
+    <color name="black_50">#80000000</color>
+
 </resources>

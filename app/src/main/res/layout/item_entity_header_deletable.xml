@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:gravity="center_vertical"
+    android:background="@drawable/bg_entity_item"
+    android:layout_marginBottom="12dp">
+
+    <ImageView
+        android:id="@+id/imgEntityIcon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/ic_entity"
+        app:tint="@color/white"
+        android:layout_marginEnd="12dp"
+        android:contentDescription="@string/icon_entity"/>
+
+
+    <TextView
+        android:id="@+id/txtEntityName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/entity"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/white" />
+
+    <ImageView
+        android:id="@+id/btnDeleteEntity"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:padding="6dp"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        android:contentDescription="@string/icon_delete"
+        app:tint="@color/danger_red" />
+
+</LinearLayout>
