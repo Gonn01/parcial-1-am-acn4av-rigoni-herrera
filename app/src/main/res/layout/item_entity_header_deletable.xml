@@ -9,12 +9,20 @@
 
     <TextView
         android:id="@+id/txtEntityName"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:text="Entidad"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@color/white" />
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/btnDeleteEntity"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:padding="6dp"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        android:tint="@color/danger_red" />
 
+</LinearLayout>
