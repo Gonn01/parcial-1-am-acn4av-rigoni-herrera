@@ -24,51 +24,82 @@ El código fuente del proyecto está disponible en GitHub:
 
 ---
 
-## 🚀 Funcionalidades principales
+## Descripción General
 
-### 🔑 LoginActivity
-- Permite acceder a la aplicación validando credenciales.  
-- **Componentes principales**:  
-  - `TextView`: título *Login*.  
-  - `EditText`: usuario  
-  - `EditText`: contraseña
-  - `Button`: acción de login.  
-- **Comportamiento**:  
-  - Campos vacíos → muestra error.  
-  - Credenciales inválidas → error de usuario/contraseña.  
-  - Credenciales correctas → acceso al Dashboard.
+La aplicación permite gestionar finanzas personales, ofreciendo al usuario:
+
+- Registro y autenticación
+
+- Creación de entidades financieras
+
+- Creación de compras asociadas a entidades
+
+- Visualización de compras por entidad
+
+- Eliminación de entidades 
+
+- Edision de compras y carga de imagenes
+
+- UI responsiva y clara
+---
+
+## Funcionalidades Principales
+🔐 Autenticación
+
+Login por email + contraseña
+
+Registro de usuario
+
+Login con Google
+
+Verificación de email
+
+Manejo de duplicación de cuentas
+
+🏦 Entidades Financieras
+
+Crear entidad
+
+Listado dinámico
+
+Eliminar entidad (con botón X)
+
+Ícono representativo de banco
+
+💸 Compras
+
+Crear compra
+
+Asociar compra a entidad
+
+Listado agrupado
+
+Monto total formateado
+
+🎨 Interfaz y experiencia
+
+Tema oscuro
+
+Material Design 3
+
+Botones verde principal
+
+Cards con espaciado y esquinas redondeadas
+
+Separación visual clara entre entidades
 
 ---
 
-### 🏠 DashboardActivity
-- Pantalla principal tras el login.  
-- Actúa como menú central con **navegación inferior**.  
-- **Componentes principales**:  
-  - `FrameLayout`: contenedor dinámico de fragments.  
-  - `BottomNavigationView`: barra inferior de navegación.  
-- **Fragments asociados**:  
-  - `HomeFragment`: lista de compras.  
-  - `FinancialEntitiesFragment`: lista de entidades financieras.  
-- **Listas dinámicas**:  
-  - `List<PurchaseHomeDto>` (compras).  
-  - `List<FinancialEntityHomeDto>` (entidades).
+🛠️  Tecnologías utilizadas
+## Tecnología	Uso
 
----
+- Android Studio – Java	Lógica principal del proyecto
+- Firebase Authentication	Login, Google Login, registro
+- Firestore	Persistencia de usuarios, entidades y compras
+- Material Components	UI moderna
+- RecyclerView + ViewHolders	Listas dinámicas
+- GitHub	Control de versiones
 
-## 🛠️ Tecnologías utilizadas
-- **Android Studio** (IDE).  
-- **Java** para la lógica de la aplicación.  
-- **XML** para layouts.    
-- **Figma** para prototipado UI/UX.  
-- **Canva** para material visual y analisis.  
-- **GitHub** para versionado y entrega.  
-
----
-
-## 📈 Plan a futuro
-- Carga de fotografías de facturas.  
-- Inclusión de tipos de cambio.  
-- Gestión de montos y cuotas.  
 
 ---
 
