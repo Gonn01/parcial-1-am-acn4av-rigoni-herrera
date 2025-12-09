@@ -52,8 +52,6 @@
         <!-- Borde normal: blanco -->
         <item name="boxStrokeColor">@color/white</item>
 
-        <!-- Borde cuando está enfocado: verde -->
-        <item name="boxStrokeColorFocused">@color/green_action</item>
 
         <!-- Hint (texto guía) color blanco -->
         <item name="hintTextColor">@color/white</item>

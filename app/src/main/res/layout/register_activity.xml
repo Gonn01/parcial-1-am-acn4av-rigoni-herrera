@@ -24,10 +24,13 @@
         <!-- Nombre -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/inputNameLayout"
-            style="@style/DarkInputRegister"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:backgroundTint="@color/white"
+            app:boxBackgroundColor="@color/white"
+            app:hintTextColor="@color/black"
             app:layout_constraintTop_toBottomOf="@id/txtRegisterTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -36,18 +39,21 @@
                 android:id="@+id/etRegisterName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/white"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:hint="@string/register_fullname" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Email -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/inputEmailLayout"
-            style="@style/DarkInputRegister"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:backgroundTint="@color/white"
+            app:boxBackgroundColor="@color/white"
+            app:hintTextColor="@color/black"
             app:layout_constraintTop_toBottomOf="@id/inputNameLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -56,8 +62,8 @@
                 android:id="@+id/etRegisterEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/white"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:inputType="textEmailAddress"
                 android:hint="@string/register_email" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -65,10 +71,13 @@
         <!-- Password -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/inputPassLayout"
-            style="@style/DarkInputRegister"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:backgroundTint="@color/white"
+            app:boxBackgroundColor="@color/white"
+            app:hintTextColor="@color/black"
             app:layout_constraintTop_toBottomOf="@id/inputEmailLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -77,8 +86,8 @@
                 android:id="@+id/etRegisterPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/white"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:inputType="textPassword"
                 android:hint="@string/register_password" />
         </com.google.android.material.textfield.TextInputLayout>

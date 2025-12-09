@@ -23,16 +23,20 @@
     <string name="register_button">Registrarse</string>
     <string name="register_go_login">¿Ya tenés cuenta? Iniciar sesión</string>
     <!-- Home / fragment -->
-    <string name="crear_compra">Crear compra</string>
+    <string name="logout">Salir</string>
+    <string name="welcome">Bienvenido!</string>
+    <string name="create_purchase">Crear compra</string>
+    <string name="create_financial_entity">Crear entidad financiera</string>
+    <string name="entity_header_title">Entidad</string>
+
+
+
 
     <!-- Home / Dashboard -->
     <string name="dashboard_title">Dashboard</string>
     <string name="dashboard_balance">Balance total</string>
     <string name="dashboard_entities">Entidades financieras</string>
 
-    <!-- Finanzas -->
-    <string name="create_purchase">Crear compra</string>
-    <string name="create_financial_entity">Crear Entidad Financiera</string>
 
     <!-- Mensajes generales -->
     <string name="error_fields_required">Todos los campos son obligatorios</string>
