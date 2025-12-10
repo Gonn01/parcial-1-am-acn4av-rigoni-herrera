@@ -31,10 +31,8 @@ public class MapaFragment extends Fragment {
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
 
-        // Mantener la navegación dentro del WebView
         webView.setWebViewClient(new WebViewClient());
 
-        // Cargar archivo local desde assets
         webView.loadUrl("file:///android_asset/map.html");
 
         return view;
