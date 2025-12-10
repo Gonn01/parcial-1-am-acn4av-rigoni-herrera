@@ -187,7 +187,7 @@ public class HomeFragment extends Fragment {
         EditText txtNombre = crearCampoTexto(layout, getString(R.string.purchase_name), getString(R.string.purchase_example_name));
         EditText txtMonto = crearCampoNumero(layout, getString(R.string.purchase_amount), getString(R.string.purchase_example_amount));
 
-        new MaterialAlertDialogBuilder(requireContext())
+        new MaterialAlertDialogBuilder(requireContext(), com.google.android.material.R.style.ThemeOverlay_Material3_Dark)
                 .setTitle(getString(R.string.create_purchase))
                 .setView(layout)
                 .setPositiveButton(getString(R.string.create_purchase), (d, w) -> {
