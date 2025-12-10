@@ -16,6 +16,7 @@ import com.example.proyectoappsmovilesdavinci.R;
 import com.example.proyectoappsmovilesdavinci.dtos.FinancialEntityHomeDto;
 import com.example.proyectoappsmovilesdavinci.ui.DashboardActivity;
 import com.example.proyectoappsmovilesdavinci.ui.adapters.dashboard.FinancialEntityListAdapter;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class FinancialEntitiesFragment extends Fragment {
@@ -26,7 +27,7 @@ public class FinancialEntitiesFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater,
+    public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
@@ -45,14 +46,25 @@ public class FinancialEntitiesFragment extends Fragment {
         listAdapter = new FinancialEntityListAdapter();
         rv.setAdapter(listAdapter);
 
-
-        listAdapter.setOnDeleteEntityListener(entity -> eliminarEntidad(entity));
+        listAdapter.setOnDeleteEntityListener(this::confirmarEliminarEntidad);
 
         refreshList();
     }
 
     private void refreshList() {
         listAdapter.setEntities(main.getEntidades());
+    }
+
+    private void confirmarEliminarEntidad(FinancialEntityHomeDto entity) {
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle(getString(R.string.delete_entity))
+                .setMessage(getString(R.string.entity_delete_confirm))
+                .setPositiveButton(
+                        getString(R.string.entity_delete_button),
+                        (dialog, which) -> eliminarEntidad(entity)
+                )
+                .setNegativeButton(getString(R.string.entity_delete_cancel), null)
+                .show();
     }
 
     private void eliminarEntidad(FinancialEntityHomeDto entity) {
@@ -73,8 +85,9 @@ public class FinancialEntitiesFragment extends Fragment {
 
                     refreshList();
 
-                    Toast.makeText(requireContext(),
-                            "Entidad eliminada: " + entity.getName(),
+                    Toast.makeText(
+                            requireContext(),
+                            getString(R.string.icon_delete) + ": " + entity.getName(),
                             Toast.LENGTH_SHORT
                     ).show();
                 });

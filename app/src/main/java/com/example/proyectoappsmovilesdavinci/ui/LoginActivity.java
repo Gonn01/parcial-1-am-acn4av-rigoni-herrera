@@ -107,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
             pendingPassword = etPassword.getText().toString().trim();
 
             if (pendingEmail.isEmpty() || pendingPassword.isEmpty()) {
-                Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.login_error_empty), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -124,7 +124,9 @@ public class LoginActivity extends AppCompatActivity {
                         cargarYEnviarUsuario(u);
                     })
                     .addOnFailureListener(e ->
-                            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                            Toast.makeText(this,
+                                    getString(R.string.login_error_generic, e.getMessage()),
+                                    Toast.LENGTH_SHORT).show());
         });
 
         btnGoogleLogin.setOnClickListener(v -> {
@@ -150,7 +152,7 @@ public class LoginActivity extends AppCompatActivity {
                 loginConGoogle(cred);
 
             } catch (Exception e) {
-                Toast.makeText(this, "Error iniciando Google", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.firebase_google_error), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -173,7 +175,7 @@ public class LoginActivity extends AppCompatActivity {
                         manejarCuentaDuplicada(pendingEmail);
 
                     } else {
-                        Toast.makeText(this, "Error Google Login", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.firebase_google_error), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -188,7 +190,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (providers.contains("password")) {
                         pedirPasswordParaLinkear(email);
                     } else {
-                        Toast.makeText(this, "No se puede vincular la cuenta.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.firebase_google_link_error), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -196,13 +198,13 @@ public class LoginActivity extends AppCompatActivity {
     private void pedirPasswordParaLinkear(String email) {
 
         EditText input = new EditText(this);
-        input.setHint("Ingresá tu contraseña");
+        input.setHint(getString(R.string.login_password));
 
         new MaterialAlertDialogBuilder(this)
-                .setTitle("Vincular cuenta")
-                .setMessage("Tu email ya está registrado. Ingresá tu contraseña para linkear Google.")
+                .setTitle(getString(R.string.register_link_password))
+                .setMessage(getString(R.string.register_existing_google))
                 .setView(input)
-                .setPositiveButton("Vincular", (d, w) -> {
+                .setPositiveButton(getString(R.string.register_link_password), (d, w) -> {
 
                     String pass = input.getText().toString().trim();
                     AuthCredential passCred =
@@ -216,30 +218,30 @@ public class LoginActivity extends AppCompatActivity {
                                 u.linkWithCredential(pendingGoogleCredential)
                                         .addOnSuccessListener(r2 -> cargarYEnviarUsuario(r2.getUser()))
                                         .addOnFailureListener(e ->
-                                                Toast.makeText(this, "No se pudo vincular Google", Toast.LENGTH_SHORT).show());
+                                                Toast.makeText(this, getString(R.string.firebase_google_link_error), Toast.LENGTH_SHORT).show());
                             })
                             .addOnFailureListener(e ->
-                                    Toast.makeText(this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show());
+                                    Toast.makeText(this, getString(R.string.login_error_generic, e.getMessage()), Toast.LENGTH_SHORT).show());
                 })
-                .setNegativeButton("Cancelar", null)
+                .setNegativeButton(android.R.string.cancel, null)
                 .show();
     }
 
     private void mostrarPantallaVerificacion(FirebaseUser user) {
 
         new MaterialAlertDialogBuilder(this)
-                .setTitle("Verifica tu email")
-                .setMessage("Revisá tu correo y verificá la cuenta antes de ingresar.\n\nEmail: " + user.getEmail())
-                .setPositiveButton("Reenviar correo", (d, w) -> {
+                .setTitle(getString(R.string.firebase_verify_email_title))
+                .setMessage(getString(R.string.firebase_verify_email_msg) + "\n\nEmail: " + user.getEmail())
+                .setPositiveButton(getString(R.string.firebase_resend_email), (d, w) -> {
 
                     user.sendEmailVerification()
                             .addOnSuccessListener(a ->
-                                    Toast.makeText(this, "Correo reenviado", Toast.LENGTH_SHORT).show())
+                                    Toast.makeText(this, getString(R.string.firebase_resend_email), Toast.LENGTH_SHORT).show())
                             .addOnFailureListener(a ->
-                                    Toast.makeText(this, "Error reenviando correo", Toast.LENGTH_SHORT).show());
+                                    Toast.makeText(this, getString(R.string.login_error_generic, a.getMessage()), Toast.LENGTH_SHORT).show());
 
                 })
-                .setNegativeButton("Cerrar sesión", (d, w) -> mAuth.signOut())
+                .setNegativeButton(getString(R.string.firebase_close_session), (d, w) -> mAuth.signOut())
                 .show();
     }
 
@@ -255,19 +257,17 @@ public class LoginActivity extends AppCompatActivity {
                             ? doc.getString("name")
                             : (firebaseUser.getDisplayName() != null
                             ? firebaseUser.getDisplayName()
-                            : "Usuario");
+                            : getString(R.string.welcome));
 
                     User myUser = new User(
                             firebaseUser.getUid(),
                             name,
                             firebaseUser.getEmail()
                     );
+
                     SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-
                     SharedPreferences.Editor editor = prefs.edit();
-
-                    editor.putString("username",  myUser.getName());
-
+                    editor.putString("username", myUser.getName());
                     editor.apply();
 
                     Intent intent = new Intent(this, DashboardActivity.class);

@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <!-- APP -->
     <string name="app_name">Proyecto Apps Móviles DaVinci</string>
     <string name="mapa">Mapa</string>
 
-    <!-- LOGIN -->
     <string name="login_user">Usuario</string>
     <string name="login_password">Contraseña</string>
     <string name="login_button">Ingresar</string>
@@ -14,7 +11,6 @@
     <string name="login_error_empty">Completa todos los campos</string>
     <string name="login_error_generic">Error: %1$s</string>
 
-    <!-- REGISTER -->
     <string name="register_title">Crear cuenta</string>
     <string name="register_fullname">Nombre completo</string>
     <string name="register_email">Correo electrónico</string>
@@ -26,11 +22,9 @@
     <string name="register_existing_google">Ese correo ya está registrado con Google. ¿Querés agregarle una contraseña?</string>
     <string name="register_link_password">Vincular contraseña</string>
 
-    <!-- DASHBOARD -->
     <string name="welcome">Bienvenido!</string>
     <string name="logout">Salir</string>
 
-    <!-- FINANCIAL ENTITIES -->
     <string name="create_financial_entity">Crear entidad financiera</string>
     <string name="entity">Entidad</string>
     <string name="entity_delete_confirm">¿Seguro que querés eliminar esta entidad?</string>
@@ -41,7 +35,6 @@
     <string name="icon_delete">Eliminar entidad</string>
 
 
-    <!-- PURCHASES -->
     <string name="create_purchase">Crear compra</string>
     <string name="purchase_name">Nombre de la compra</string>
     <string name="purchase_amount">Monto</string>
@@ -56,7 +49,6 @@
     <string name="purchase_invalid_amount">Monto inválido</string>
 
 
-    <!-- FIREBASE / GOOGLE -->
     <string name="firebase_verify_email_title">Verifica tu email</string>
     <string name="firebase_verify_email_msg">Revisá tu correo y verificá la cuenta antes de ingresar.</string>
     <string name="firebase_resend_email">Reenviar correo</string>
@@ -68,7 +60,6 @@
     <string name="icon_entity">Icono de entidad</string>
 
 
-    <!-- URLS / LOGOS -->
     <string name="url_logo_google">https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/40px-Google_%22G%22_logo.svg.png</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

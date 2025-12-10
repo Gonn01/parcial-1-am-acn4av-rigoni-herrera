@@ -69,7 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
         pendingPassword = etPassword.getText().toString().trim();
 
         if (name.isEmpty() || pendingEmail.isEmpty() || pendingPassword.isEmpty()) {
-            Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.register_error_empty), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -80,7 +80,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     firebaseUser.sendEmailVerification()
                             .addOnSuccessListener(a ->
-                                    Toast.makeText(this, "Te enviamos un correo para verificar tu cuenta.", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(this, getString(R.string.register_created), Toast.LENGTH_LONG).show()
                             );
 
                     Map<String, Object> data = new HashMap<>();
@@ -92,7 +92,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     auth.signOut();
 
-                    Toast.makeText(this, "Cuenta creada. Verificá tu email antes de ingresar.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.register_created), Toast.LENGTH_LONG).show();
                     startActivity(new Intent(this, LoginActivity.class));
                     finish();
                 })
@@ -101,17 +101,17 @@ public class RegisterActivity extends AppCompatActivity {
                     if (e instanceof FirebaseAuthUserCollisionException) {
                         mostrarDialogoVincularGoogle();
                     } else {
-                        Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.login_error_generic, e.getMessage()), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
     private void mostrarDialogoVincularGoogle() {
         new MaterialAlertDialogBuilder(this)
-                .setTitle("Email ya registrado")
-                .setMessage("Ese correo ya está registrado con Google. ¿Querés agregarle una contraseña?")
-                .setPositiveButton("Vincular", (d, w) -> iniciarReAuthGoogle())
-                .setNegativeButton("Cancelar", null)
+                .setTitle(getString(R.string.register_link_password))
+                .setMessage(getString(R.string.register_existing_google))
+                .setPositiveButton(getString(R.string.register_link_password), (d, w) -> iniciarReAuthGoogle())
+                .setNegativeButton(android.R.string.cancel, null)
                 .show();
     }
 
@@ -136,11 +136,11 @@ public class RegisterActivity extends AppCompatActivity {
                 auth.signInWithCredential(pendingGoogleCredential)
                         .addOnSuccessListener(result -> linkPassword(result.getUser()))
                         .addOnFailureListener(e ->
-                                Toast.makeText(this, "Error autenticando Google", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this, getString(R.string.firebase_google_error), Toast.LENGTH_SHORT).show()
                         );
 
             } catch (Exception e) {
-                Toast.makeText(this, "Cancelado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.firebase_close_session), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -152,7 +152,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         user.linkWithCredential(passCred)
                 .addOnSuccessListener(result -> {
-                    Toast.makeText(this, "Cuenta vinculada. Ahora verificá tu email.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.register_created), Toast.LENGTH_LONG).show();
 
                     result.getUser().sendEmailVerification();
 
@@ -168,7 +168,7 @@ public class RegisterActivity extends AppCompatActivity {
                     finish();
                 })
                 .addOnFailureListener(e ->
-                        Toast.makeText(this, "Error al vincular contraseña", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getString(R.string.firebase_google_link_error), Toast.LENGTH_SHORT).show()
                 );
     }
 }
