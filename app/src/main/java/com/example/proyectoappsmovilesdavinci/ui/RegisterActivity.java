@@ -35,7 +35,6 @@ public class RegisterActivity extends AppCompatActivity {
     private GoogleSignInClient googleClient;
     private static final int RC_LINK_GOOGLE = 2000;
 
-    // Para linkear contraseña ↔ Google
     private String pendingEmail;
     private String pendingPassword;
     private AuthCredential pendingGoogleCredential;
@@ -52,7 +51,6 @@ public class RegisterActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        // Config Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -80,13 +78,11 @@ public class RegisterActivity extends AppCompatActivity {
 
                     FirebaseUser firebaseUser = result.getUser();
 
-                    // 👉 Enviar verificación por email
                     firebaseUser.sendEmailVerification()
                             .addOnSuccessListener(a ->
                                     Toast.makeText(this, "Te enviamos un correo para verificar tu cuenta.", Toast.LENGTH_LONG).show()
                             );
 
-                    // Guardar en Firestore
                     Map<String, Object> data = new HashMap<>();
                     data.put("uid", firebaseUser.getUid());
                     data.put("name", name);
@@ -94,7 +90,6 @@ public class RegisterActivity extends AppCompatActivity {
 
                     db.collection("users").document(firebaseUser.getUid()).set(data);
 
-                    // Cerrar sesión
                     auth.signOut();
 
                     Toast.makeText(this, "Cuenta creada. Verificá tu email antes de ingresar.", Toast.LENGTH_LONG).show();
@@ -104,7 +99,6 @@ public class RegisterActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> {
 
                     if (e instanceof FirebaseAuthUserCollisionException) {
-                        // Email ya existe en Google
                         mostrarDialogoVincularGoogle();
                     } else {
                         Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -160,10 +154,8 @@ public class RegisterActivity extends AppCompatActivity {
                 .addOnSuccessListener(result -> {
                     Toast.makeText(this, "Cuenta vinculada. Ahora verificá tu email.", Toast.LENGTH_LONG).show();
 
-                    // Enviar email verificación
                     result.getUser().sendEmailVerification();
 
-                    // Guardar Firestore
                     Map<String, Object> data = new HashMap<>();
                     data.put("uid", result.getUser().getUid());
                     data.put("name", etName.getText().toString());

@@ -3,6 +3,7 @@
 
     <!-- APP -->
     <string name="app_name">Proyecto Apps Móviles DaVinci</string>
+    <string name="mapa">Mapa</string>
 
     <!-- LOGIN -->
     <string name="login_user">Usuario</string>
@@ -67,8 +68,9 @@
     <string name="icon_entity">Icono de entidad</string>
 
 
-
     <!-- URLS / LOGOS -->
     <string name="url_logo_google">https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/40px-Google_%22G%22_logo.svg.png</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

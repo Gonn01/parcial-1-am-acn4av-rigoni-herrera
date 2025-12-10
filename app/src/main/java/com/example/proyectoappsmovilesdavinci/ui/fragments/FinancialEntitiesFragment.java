@@ -55,10 +55,8 @@ public class FinancialEntitiesFragment extends Fragment {
         listAdapter.setEntities(main.getEntidades());
     }
 
-    // funcion PARA ELIMINAR ENTIDAD
     private void eliminarEntidad(FinancialEntityHomeDto entity) {
 
-        // 1️⃣ Eliminar en Firestore
         db.collection("financial_entities")
                 .whereEqualTo("id", entity.getId())
                 .get()
@@ -71,10 +69,8 @@ public class FinancialEntitiesFragment extends Fragment {
                                 .delete();
                     }
 
-                    // 2️⃣ Eliminar de la lista en DashboardActivity
                     main.getEntidades().remove(entity);
 
-                    // 3️⃣ Actualizar pantalla
                     refreshList();
 
                     Toast.makeText(requireContext(),

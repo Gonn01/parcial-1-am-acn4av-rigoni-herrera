@@ -17,7 +17,6 @@ import java.util.List;
 
 public class FinancialEntityListAdapter extends RecyclerView.Adapter<FinancialEntityListAdapter.EntityVH> {
 
-    // 1. Listener para avisar al Fragment que se quiere eliminar una entidad
     public interface OnDeleteEntityListener {
         void onDelete(FinancialEntityHomeDto entity);
     }
@@ -28,7 +27,6 @@ public class FinancialEntityListAdapter extends RecyclerView.Adapter<FinancialEn
         this.deleteListener = listener;
     }
 
-    // Lista existente
     private final List<FinancialEntityHomeDto> entities = new ArrayList<>();
 
     public void setEntities(List<FinancialEntityHomeDto> newEntities) {
@@ -49,7 +47,6 @@ public class FinancialEntityListAdapter extends RecyclerView.Adapter<FinancialEn
     public void onBindViewHolder(@NonNull EntityVH holder, int position) {
         FinancialEntityHomeDto entity = entities.get(position);
 
-        // Mostrar el nombre
         holder.txt.setText(entity.getName());
 
         holder.btnDelete.setOnClickListener(v -> {
@@ -67,14 +64,13 @@ public class FinancialEntityListAdapter extends RecyclerView.Adapter<FinancialEn
     static class EntityVH extends RecyclerView.ViewHolder {
 
         final TextView txt;
-        final ImageView btnDelete; //  3. Referencia al botón X del layout
+        final ImageView btnDelete; 
 
         EntityVH(@NonNull View itemView) {
             super(itemView);
 
             txt = itemView.findViewById(R.id.txtEntityName);
 
-            // buscar la X dentro del layout item_entity_header.xml
             btnDelete = itemView.findViewById(R.id.btnDeleteEntity);
         }
 

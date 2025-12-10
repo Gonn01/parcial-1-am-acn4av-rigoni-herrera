@@ -44,6 +44,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation ("com.google.firebase:firebase-auth:22.0.0")
     implementation ("com.google.firebase:firebase-firestore")
+    implementation ("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation(libs.firebase.firestore)

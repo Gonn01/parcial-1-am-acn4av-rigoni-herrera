@@ -1,6 +1,7 @@
 package com.example.proyectoappsmovilesdavinci.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,9 +55,6 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        // ---------------------------------------
-        // 🔥 AUTLOGIN
-        // ---------------------------------------
         if (mAuth.getCurrentUser() != null) {
 
             FirebaseUser u = mAuth.getCurrentUser();
@@ -103,9 +101,6 @@ public class LoginActivity extends AppCompatActivity {
         findViewById(R.id.txtGoRegister).setOnClickListener(v ->
                 startActivity(new Intent(this, RegisterActivity.class)));
 
-        // ---------------------------------------
-        // 🔹 LOGIN EMAIL + PASS
-        // ---------------------------------------
         btnLogin.setOnClickListener(v -> {
 
             pendingEmail = etUsuario.getText().toString().trim();
@@ -213,7 +208,6 @@ public class LoginActivity extends AppCompatActivity {
                     AuthCredential passCred =
                             EmailAuthProvider.getCredential(email, pass);
 
-                    // Loguear con email+pass
                     mAuth.signInWithEmailAndPassword(email, pass)
                             .addOnSuccessListener(result -> {
 
@@ -268,6 +262,13 @@ public class LoginActivity extends AppCompatActivity {
                             name,
                             firebaseUser.getEmail()
                     );
+                    SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+
+                    SharedPreferences.Editor editor = prefs.edit();
+
+                    editor.putString("username",  myUser.getName());
+
+                    editor.apply();
 
                     Intent intent = new Intent(this, DashboardActivity.class);
                     intent.putExtra("user", myUser);

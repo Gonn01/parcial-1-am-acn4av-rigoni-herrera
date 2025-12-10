@@ -70,9 +70,9 @@ Si falta algo de esta sección → **desaprobado automático**.
 
 ### **UI / UX**
 
-- [ ] Elegir paleta de colores adecuada.
-- [ ] Diseño consistente.
-- [ ] Buena usabilidad.
+- [x] Elegir paleta de colores adecuada.
+- [x] Diseño consistente.
+- [x] Buena usabilidad.
 
 ### **Buenas prácticas**
 

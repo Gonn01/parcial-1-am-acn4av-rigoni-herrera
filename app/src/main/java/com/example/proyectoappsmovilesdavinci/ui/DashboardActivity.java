@@ -15,6 +15,7 @@ import com.example.proyectoappsmovilesdavinci.dtos.PurchaseHomeDto;
 import com.example.proyectoappsmovilesdavinci.dtos.User;
 import com.example.proyectoappsmovilesdavinci.ui.fragments.FinancialEntitiesFragment;
 import com.example.proyectoappsmovilesdavinci.ui.fragments.HomeFragment;
+import com.example.proyectoappsmovilesdavinci.ui.fragments.MapaFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -62,7 +63,7 @@ public class DashboardActivity extends AppCompatActivity {
                         user = new User(user.getId(), name, user.getEmail());
                     }
 
-                    cargarEntidades();  // 🔥 continuar recién cuando termine
+                    cargarEntidades(); 
                 });
     }
 
@@ -86,7 +87,7 @@ public class DashboardActivity extends AppCompatActivity {
                         ));
                     }
 
-                    cargarCompras(); // 🔥 continuar cuando termine
+                    cargarCompras();
                 });
     }
 
@@ -108,7 +109,6 @@ public class DashboardActivity extends AppCompatActivity {
                         ));
                     }
 
-                    // 🔥 AHORA SÍ: ya tengo TODO → recién acá muestro UI
                     iniciarUI();
                 });
     }
@@ -117,12 +117,11 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
         bottomNav = findViewById(R.id.bottom_navigation);
 
-        swap(new HomeFragment()); // ahora sí, con user cargado
-
+        swap(new HomeFragment());
         bottomNav.setOnItemSelectedListener(item -> {
             Fragment f = (item.getItemId() == R.id.nav_home)
                     ? new HomeFragment()
-                    : new FinancialEntitiesFragment();
+                    :(item.getItemId() == R.id.mapa)?new MapaFragment(): new FinancialEntitiesFragment();
 
             swap(f);
             return true;

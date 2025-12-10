@@ -7,4 +7,8 @@
         android:id="@+id/nav_financial_entities"
         android:icon="@drawable/ic_financial_entities"
         android:title="@string/tab_financial_entities" />
+    <item
+        android:id="@+id/mapa"
+        android:icon="@drawable/ic_financial_entities"
+        android:title="@string/mapa" />
 </menu>

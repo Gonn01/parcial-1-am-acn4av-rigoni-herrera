@@ -1,6 +1,9 @@
 package com.example.proyectoappsmovilesdavinci.ui.fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -69,7 +72,11 @@ public class HomeFragment extends Fragment {
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         TextView welcomeTxt = view.findViewById(R.id.welcome);
-        welcomeTxt.setText("Bienvenido, " + user.getName() + "!");
+        SharedPreferences prefs = getActivity().getSharedPreferences("MyPrefs", MODE_PRIVATE);
+
+        String username = prefs.getString("username", "Sin nombre");
+
+        welcomeTxt.setText("Bienvenido, " + username + "!");
 
         imagePickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.GetContent(),
@@ -198,9 +205,6 @@ public class HomeFragment extends Fragment {
                 .show();
     }
 
-    // ----------------------------------------------------------
-    // 🔥 MÉTODO COMPLETO MODIFICADO: EDITAR COMPRA (SPINNER DARK)
-    // ----------------------------------------------------------
     private void mostrarDialogoEditarCompra(int purchaseId) {
 
         PurchaseHomeDto compra = buscarCompraPorId(purchaseId);
@@ -209,27 +213,24 @@ public class HomeFragment extends Fragment {
 
         LinearLayout layout = crearLayoutDialogo();
 
-        // === LABEL DE ENTIDAD ===
         TextView lblEntidad = new TextView(requireContext());
         lblEntidad.setText("Entidad financiera");
         lblEntidad.setTextColor(getResources().getColor(R.color.text_primary));
         lblEntidad.setPadding(0, 10, 0, 10);
         layout.addView(lblEntidad);
 
-        // SPINNER O
         Spinner spEntidad = new Spinner(requireContext());
         spEntidad.setBackgroundResource(R.drawable.bg_spinner_dark);
         layout.addView(spEntidad);
 
         ArrayAdapter<FinancialEntityHomeDto> adpEntidad = new ArrayAdapter<>(
                 requireContext(),
-                R.layout.item_spinner_dark,   // vista cerrada
+                R.layout.item_spinner_dark, 
                 main.getEntidades()
         );
-        adpEntidad.setDropDownViewResource(R.layout.item_spinner_dropdown_dark); // lista desplegable dark
+        adpEntidad.setDropDownViewResource(R.layout.item_spinner_dropdown_dark); 
         spEntidad.setAdapter(adpEntidad);
 
-        // Preseleccionar entidad actual
         int index = 0;
         for (int i = 0; i < main.getEntidades().size(); i++) {
             if (main.getEntidades().get(i).getId() == compra.getFinancialEntityId()) {
@@ -238,17 +239,14 @@ public class HomeFragment extends Fragment {
             }
         }
         spEntidad.setSelection(index);
-        // ⭐⭐⭐ FIN SPINNER DARK ⭐⭐⭐
 
 
-        // --- CAMPOS ---
         EditText txtNombre = crearCampoTexto(layout, "Nombre", "");
         txtNombre.setText(compra.getName());
 
         EditText txtMonto = crearCampoNumero(layout, "Monto", "");
         txtMonto.setText(String.valueOf(compra.getAmount()));
 
-        // --- IMAGEN ---
         TextView lblImg = new TextView(requireContext());
         lblImg.setText("Imagen de factura");
         lblImg.setTextColor(getResources().getColor(R.color.text_primary));
@@ -271,7 +269,6 @@ public class HomeFragment extends Fragment {
             btnVerImg.setOnClickListener(v -> mostrarDialogoVerImagen(compra.getImageUri()));
         }
 
-        // --- DIALOGO ---
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Editar Compra")
                 .setView(layout)
