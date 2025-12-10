@@ -13,11 +13,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectoappsmovilesdavinci.R;
+import com.example.proyectoappsmovilesdavinci.api.ApiService;
+import com.example.proyectoappsmovilesdavinci.api.RetrofitClient;
 import com.example.proyectoappsmovilesdavinci.dtos.FinancialEntityHomeDto;
+import com.example.proyectoappsmovilesdavinci.dtos.FinancialEntityListDtoResponse;
 import com.example.proyectoappsmovilesdavinci.ui.DashboardActivity;
 import com.example.proyectoappsmovilesdavinci.ui.adapters.dashboard.FinancialEntityListAdapter;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FinancialEntitiesFragment extends Fragment {
 
@@ -52,7 +59,29 @@ public class FinancialEntitiesFragment extends Fragment {
     }
 
     private void refreshList() {
-        listAdapter.setEntities(main.getEntidades());
+
+        String token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxOCIsImVtYWlsIjoiZ29uemFsbzEyQGV4YW1wbGUuY29tIiwiaWF0IjoxNzY1MzA2OTA5LCJleHAiOjE3NjU5MTE3MDl9.grAYaNWY8Dxd_awKjPQDAwhsmpHoRfONghhGs8-zbc4";
+
+        ApiService api = RetrofitClient.getInstance().create(ApiService.class);
+
+        api.getDashboard(token).enqueue(new Callback<FinancialEntityListDtoResponse>() {
+            @Override
+            public void onResponse(Call<FinancialEntityListDtoResponse> call,
+                                   Response<FinancialEntityListDtoResponse> res) {
+
+                if (!res.isSuccessful() || res.body() == null) {
+                    Toast.makeText(requireContext(), "Error al obtener datos", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                listAdapter.setEntities(res.body().data);
+            }
+
+            @Override
+            public void onFailure(Call<FinancialEntityListDtoResponse> call, Throwable t) {
+                Toast.makeText(requireContext(), "Fallo de conexión", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void confirmarEliminarEntidad(FinancialEntityHomeDto entity) {
